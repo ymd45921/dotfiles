@@ -7,7 +7,8 @@ $HttpProxy = 'http://127.0.0.1:7890'
 $FiddlerProxyPort = '8888'
 $OneDriveRoot = $env:OneDrive   # $env:OneDriveConsumer
 $PwshProfileDir = $PSScriptRoot
-$CustomModuleDir = Join-Path $PwshProfileDir '\Modules\user-custom'
+$CustomModulesDir = Join-Path $PwshProfileDir '\Modules\user-custom'
+$LocalCustomModulesDir = Join-Path $CustomModulesDir $env:COMPUTERNAME
 # $WinNetIPinWSL = $(Get-NetIPAddress -InterfaceAlias 'vEthernet (WSL)' -AddressFamily IPV4)
 
 ### Initialize Oh-My-Posh Ver 3
@@ -72,5 +73,11 @@ function Get-CommandLocation {param([string]$CommandName);$Command = Get-Command
 Set-Alias where-cmd Get-CommandLocation
 
 ### Load customized user scripts and modules
-$CustomModules = Get-ChildItem -Path $CustomModuleDir -Filter *.ps1
-foreach ($module in $CustomModules) {. $module.FullName}
+function Invoke-CustomModules {
+    param([string]$Path,[switch]$Verbose);
+    $CustomModules = Get-ChildItem -Path $Path -Filter *.ps1;
+    if ($Verbose) {Write-Host $CustomModules}
+    foreach ($module in $CustomModules) {. $module.FullName}
+}
+. Invoke-CustomModules -Path $CustomModulesDir
+. Invoke-CustomModules -Path $LocalCustomModulesDir

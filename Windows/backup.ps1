@@ -17,4 +17,4 @@ function New-DirectoryRecursively {
 ### Run copy
 Copy-Item -Path $PowershellCoreProfileDir -Destination $PSScriptRoot -Recurse -Force
 New-DirectoryRecursively -Path (Join-Path $PSScriptRoot "/Terminal/")
-Copy-Item -Path $TerminalSettingsPath -Destination (Join-Path $PSScriptRoot "/Terminal/")
+Copy-Item -Path $TerminalSettingsPath -Destination (Join-Path $PSScriptRoot "/Terminal/") -Force
