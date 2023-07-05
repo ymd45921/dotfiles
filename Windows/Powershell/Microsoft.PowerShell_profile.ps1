@@ -22,21 +22,21 @@ oh-my-posh init pwsh --config $OhMyPosh3Theme | Invoke-Expression
 ### Alias for configure Powershell profile
 function PwshProfile {notepad $profile}
 function PwshProfileCode {code $profile}
-function PwshProfileReload {. $profile}
-function GetProfileDir {$PwshProfileDir = Split-Path $PROFILE}
 function ShowProfileMember {$profile | Get-Member}
+function OpenProfileDir {explorer $PwshProfileDir}
 Set-Alias ps-prof PwshProfile
 Set-Alias settings PwshProfile
 Set-Alias config PwshProfile
 Set-Alias profile PwshProfileCode
-Set-Alias reload PwshProfileReload
 
 ### Alias for setting proxy
 function SetGitProxySocks5 {git config --global http.proxy $Socks5Proxy; git config --global https.proxy $Socks5Proxy}
 function SetYarnProxyHttp {yarn config set proxy $HttpProxy; yarn config set https-proxy $HttpProxy}
 function SetNpmProxyHttp {npm config set proxy $HttpProxy; npm config set https-proxy $HttpProxy}
+function SetPnpmProxyHttp {pnpm config set proxy $HttpProxy; pnpm config set https-proxy $HttpProxy}
 function RemoveYarnProxy {yarn config delete proxy; yarn config delete https-proxy}
 function RemoveNpmProxy {npm config delete proxy; npm config delete https-proxy}
+function RemovePnpmProxy {pnpm config delete proxy; pnpm config delete https-proxy}
 # function SetWsaProxyLegacy {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$($WinNetIPinWSL.IPAddress):$MixinProxyPort"}
 function GetWsaNetHostIP {adb connect 127.0.0.1:$WsaAdbPort | Out-Null; adb shell echo '`ip route list match 0 table all scope global | cut -F3`'}
 function SetWsaProxy {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$(GetWsaNetHostIP):$MixinProxyPort"}
@@ -44,6 +44,7 @@ function RemoveWsaProxy {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings p
 function SetWsaFiddler {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$(GetWsaNetHostIP):$FiddlerProxyPort"}
 Set-Alias yarn-proxy SetYarnProxyHttp
 Set-Alias npm-proxy SetNpmProxyHttp
+Set-Alias pnpm-proxy SetPnpmProxyHttp
 Set-Alias git-proxy SetGitProxySocks5
 Set-Alias wsa-proxy SetWsaProxy
 Set-Alias wsa-fiddler SetWsaFiddler

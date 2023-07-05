@@ -12,3 +12,5 @@ Set-Alias img-shiraha StartLocalImageServer
 ### Alias for workspace shortcuts
 function OpenBlogRepoWorkspace {code $BlogRepoDir}
 Set-Alias blog OpenBlogRepoWorkspace
+function OpenRustOfficialBook {serve D:\Personal\Downloads\trpl-zh-cn-gh-pages -p 6374}
+Set-Alias rustbook OpenRustOfficialBook
