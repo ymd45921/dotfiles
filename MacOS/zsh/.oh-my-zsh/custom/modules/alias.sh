@@ -1,0 +1,7 @@
+alias zshrc="vim ~/.zshrc"
+alias py="python3"
+alias python="python3"
+alias reload="source ~/.zshrc"
+alias proxy="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
+alias profile="code ~/.zshrc"
+alias pubkey="cat ~/.ssh/id_rsa.pub | pbcopy"

@@ -1,0 +1,8 @@
+*.png
+MacOS/**/*.md
+.github
+.revision-hash
+.version
+.circleci
+.DS_Store
+.vscode
