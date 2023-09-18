@@ -22,3 +22,22 @@ set_brew_default_source() {
     # 重新拉取远程
     brew update
 }
+
+function convert_video_to_gif() {
+    if [[ -z $1 ]]; then
+        echo "No input file."
+        return 1
+    fi
+    local input_file="$1"
+    local output_file="$2"
+    if [[ -z $2 ]]; then
+        if [[ -e "./output.gif" ]]; then
+            echo "Default output file is exist."
+            return 1
+        fi
+        output_file="output.gif"
+    fi
+    ffmpeg -i $input_file -c:v gif -loop 0 $output_file
+}
+
+alias mp42gif="convert_video_to_gif"

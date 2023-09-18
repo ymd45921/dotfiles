@@ -1,1 +1,1 @@
-alias mpg="ssh i@192.168.1.8"
+alias mpg="ssh i@lsz.ddns.net"
