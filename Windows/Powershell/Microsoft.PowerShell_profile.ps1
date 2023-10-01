@@ -72,6 +72,8 @@ Set-Alias stop-sshd StopOpenSSHServer
 Set-Alias restart-sshd RestartOpenSSHServer
 function Get-CommandLocation {param([string]$CommandName);$Command = Get-Command $CommandName;$Command.Source}
 Set-Alias where-cmd Get-CommandLocation
+Set-Alias show-verb Get-Verb # Has default alias "verb"
+Set-Alias verbs Get-Verb
 
 ### Load customized user scripts and modules
 function Invoke-CustomModules {
@@ -80,5 +82,9 @@ function Invoke-CustomModules {
     if ($Verbose) {Write-Host $CustomModules}
     foreach ($module in $CustomModules) {. $module.FullName}
 }
-. Invoke-CustomModules -Path $CustomModulesDir
-. Invoke-CustomModules -Path $LocalCustomModulesDir
+function Initialize-CustomModules {
+    . Invoke-CustomModules -Path $CustomModulesDir
+    . Invoke-CustomModules -Path $LocalCustomModulesDir
+}
+. Initialize-CustomModules
+Set-Alias reload Initialize-CustomModules
