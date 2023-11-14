@@ -100,14 +100,26 @@ function Add-WindowsDefenderExclusionRule {
 }
 
 ### Install fonts for current user
+# Will show system window & Cannot force install
 function Install-FontsForCurrentUser {
     [CmdletBinding()]
     Param (
-        [string[]]$Files,
-        [string]$File
+        [Parameter(Position=0, ValueFromRemainingArguments=$true)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]$Paths
     )
     $objShell = New-Object -ComObject Shell.Application
     $Fonts = $objShell.NameSpace(20)
+    foreach ($Path in $Paths) {
+        if ((Get-Item -Path $Path).PSIsContainer) {
+            $Files = @()
+            $Files += Get-ChildItem -Path $Path -Filter *.ttf
+            $Files += Get-ChildItem -Path $Path -Filter *.otf
+            foreach ($File in $Files) {
+                $Fonts.CopyHere($File.FullName)
+            }
+        } else { $Fonts.CopyHere($Path) }
+    }
     If (!($Files -eq $null)){  Get-ChildItem "$Files\*.ttf" | ForEach-Object {$Fonts.CopyHere($_.FullName)} }
     ElseIf (!($File -eq $null)){ $Fonts.CopyHere($File) }
 }
