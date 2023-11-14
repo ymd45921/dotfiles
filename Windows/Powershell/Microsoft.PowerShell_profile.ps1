@@ -53,6 +53,9 @@ Set-Alias wsa-fiddler SetWsaFiddler
 Set-Alias reboot Restart-Computer
 Set-Alias alias Set-Alias
 Set-Alias getcmd Get-Command # `where` ?
+Set-Alias test-admin Test-AdminPrivilege
+Set-Alias show-verb Get-Verb # Has default alias "verb"
+Set-Alias verbs Get-Verb
 
 ### Alias for scripts and functions
 function ShowWlanBssid {netsh wlan show networks mode=bssid}
@@ -68,16 +71,22 @@ Set-Alias adb-wsa AdbConnectWsa
 function StartOpenSSHServer {Start-Service sshd}
 function StopOpenSSHServer {Stop-Service sshd}
 function RestartOpenSSHServer {Restart-Service sshd}
-Set-Alias start-sshd StartOpenSSHServer
-Set-Alias stop-sshd StopOpenSSHServer
-Set-Alias restart-sshd RestartOpenSSHServer
+Set-Alias sshd-start StartOpenSSHServer
+Set-Alias sshd-stop StopOpenSSHServer
+Set-Alias sshd-restart RestartOpenSSHServer
 function Get-CommandLocation {param([string]$CommandName);$Command = Get-Command $CommandName;$Command.Source}
 Set-Alias where-cmd Get-CommandLocation
-Set-Alias show-verb Get-Verb # Has default alias "verb"
-Set-Alias verbs Get-Verb
 Set-Alias open Start-Process # emulate Mac open; open = Start-Process = explorer
 function Stop-ApplicationByDir {param([string]$Path); Get-Process | Where-Object {$_.Path -eq $Path} | Stop-Process}
 Set-Alias shut Stop-ApplicationByDir
+function Test-AdminPrivilege {([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)} # Test-Administrator
+Set-Alias is-admin Test-AdminPrivilege
+function Start-AdminTerminal {Start-Process wt -Verb runAs} # Will open a new window. Any solution?
+Set-Alias su Start-AdminTerminal
+function Invoke-CommandAsAdmin { # ! not work
+    param([Parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][string]$Command)
+    Start-Process pwsh -Verb runAs -ArgumentList '-ExecutionPolicy Bypass -Command `"Invoke-Expression -Command ""$Command""`" '
+}
 
 ### Load customized user scripts and modules
 function Invoke-CustomModules {
@@ -91,4 +100,4 @@ function Initialize-CustomModules {
     . Invoke-CustomModules -Path $LocalCustomModulesDir
 }
 . Initialize-CustomModules
-Set-Alias reload Initialize-CustomModules
+Set-Alias reload $profile

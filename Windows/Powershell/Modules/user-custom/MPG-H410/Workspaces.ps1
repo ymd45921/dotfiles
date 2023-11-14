@@ -3,7 +3,7 @@ $BlogRepoDir = 'D:\Personal\Temp\blog\Hexo-ymd45921'
 $UpyunSyncDir = Join-Path -Path $OneDriveRoot -ChildPath '/应用/upyun/'
 $LearnCGDir = '~\Desktop\Learn-CG'
 $DownloadsDir = 'D:\Personal\Downloads'
-$OhMyDotfilesDir = 'D:\Personal\Temp\sb\my-dotfiles'
+$OhMyDotfilesDir = 'C:\Users\i\source\my-dotfiles'
 
 ### Alias for command related to specific tools
 function SyncUpyunDefaultBucket {upx sync $UpyunSyncDir /}

@@ -6,3 +6,4 @@ MacOS/**/*.md
 .circleci
 .DS_Store
 .vscode
+*.log

@@ -7,3 +7,6 @@ $TerminalDestination = Join-Path $env:LOCALAPPDATA "Packages\Microsoft.WindowsTe
 ### Run copy
 Copy-Item -Path $PowershellBackup -Destination (Split-Path (Split-Path $PROFILE)) -Recurse -Force
 Copy-Item -Path $TerminalBackup -Destination $TerminalDestination -Force
+
+### Try refresh profile
+. $profile
