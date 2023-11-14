@@ -20,14 +20,11 @@ oh-my-posh init pwsh --config $OhMyPosh3Theme | Invoke-Expression
 # Set-Theme robbyrussell
 
 ### Alias for configure Powershell profile
-function PwshProfile {notepad $profile}
-function PwshProfileCode {code $profile}
+function PwshProfile {open $profile}
 function ShowProfileMember {$profile | Get-Member}
 function OpenProfileDir {explorer $PwshProfileDir}
 Set-Alias ps-prof PwshProfile
-Set-Alias settings PwshProfile
-Set-Alias config PwshProfile
-Set-Alias profile PwshProfileCode
+Set-Alias profile $profile
 
 ### Alias for setting proxy
 function SetGitProxySocks5 {git config --global http.proxy $Socks5Proxy; git config --global https.proxy $Socks5Proxy}
@@ -56,6 +53,7 @@ Set-Alias getcmd Get-Command # `where` ?
 Set-Alias test-admin Test-AdminPrivilege
 Set-Alias show-verb Get-Verb # Has default alias "verb"
 Set-Alias verbs Get-Verb
+Set-Alias hash Get-FileHash
 
 ### Alias for scripts and functions
 function ShowWlanBssid {netsh wlan show networks mode=bssid}
@@ -83,6 +81,31 @@ function Test-AdminPrivilege {([Security.Principal.WindowsPrincipal] [Security.P
 Set-Alias is-admin Test-AdminPrivilege
 function Start-AdminTerminal {Start-Process wt -Verb runAs} # Will open a new window. Any solution?
 Set-Alias su Start-AdminTerminal
+function Get-FileMD5 {param([string]$Path); return (Get-FileHash -Path $Path -Algorithm MD5).Hash}
+function Get-FileSHA1 {param([string]$Path); return (Get-FileHash -Path $Path -Algorithm SHA1).Hash}
+function Get-FileSHA256 {param([string]$Path); return (Get-FileHash -Path $Path -Algorithm SHA256).Hash}
+Set-Alias md5 Get-FileMD5
+Set-Alias sha1 Get-FileSHA1
+Set-Alias sha256 Get-FileSHA256
+function Get-FileHashes {
+    param (
+        [Parameter(Position=0, Mandatory=$true)]
+        [ValidateScript({Test-Path $_ -PathType Leaf})]
+        [string]$FilePath, 
+        [Parameter(Position=1, ValueFromRemainingArguments=$true)]
+        [ValidateNotNullOrEmpty()]
+        [string[]]$Algorithms
+    )
+    $hashAlgorithms = $Algorithms
+    $hashes = @{}
+    foreach ($algorithm in $hashAlgorithms) {
+        $hash = (Get-FileHash -Path $FilePath -Algorithm $algorithm).Hash
+        $hashes[$algorithm] = $hash
+    }
+    $hashes['Path'] = $FilePath
+    $hashesObject = [PSCustomObject]$hashes
+    return $hashesObject
+}
 function Invoke-CommandAsAdmin { # ! not work
     param([Parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][string]$Command)
     Start-Process pwsh -Verb runAs -ArgumentList '-ExecutionPolicy Bypass -Command `"Invoke-Expression -Command ""$Command""`" '

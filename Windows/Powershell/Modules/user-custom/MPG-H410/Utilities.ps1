@@ -46,3 +46,36 @@ function Add-FirewallBlockRule {
 }
 Set-Alias Block-AppNetworkAccess Add-FirewallBlockRule
 Set-Alias netbl Block-AppNetworkAccess
+
+### Calculate all hashes of a file
+function Get-FileAllHash {
+    param (
+        [Parameter(Mandatory = $true)]
+        [ValidateScript({Test-Path $_ -PathType Leaf})]
+        [string]$FilePath, 
+        [switch]$Print      # cannot access member after formatting
+    )
+    $hashAlgorithms = @('MD5', 'SHA1', 'SHA256', 'SHA384', 'SHA512')
+    $hashesObject = (Get-FileHashes -FilePath $FilePath -Algorithms $hashAlgorithms)
+    if ($Print) { return ($hashesObject | Format-Table -AutoSize) }
+    return $hashesObject
+}
+Set-Alias all-hash Get-FileAllHash
+Set-Alias hashes Get-FileAllHash
+
+### Compare 2 file by hash
+function Compare-FileByHash {
+    param(
+        [Parameter(Mandatory = $true)]
+        [ValidateScript({Test-Path $_ -PathType Leaf})]
+        [string]$Path1,
+        [Parameter(Mandatory = $true)]
+        [ValidateScript({Test-Path $_ -PathType Leaf})]
+        [string]$Path2
+    )
+    $hash1 = (Get-FileHash -Path $Path1).Hash
+    $hash2 = (Get-FileHash -Path $Path2).Hash
+    $md51 = Get-FileMD5 $Path1
+    $md52 = Get-FileMD5 $Path2
+    return (($hash1 -eq $hash2) -and ($md51 -eq $md52))
+}
