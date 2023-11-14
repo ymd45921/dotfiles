@@ -60,6 +60,7 @@ Set-Alias wlan-bssid ShowWlanBssid
 function GetNowDateAndTime {Get-Date -format "yyyy-MM-dd HH:mm:ss"}
 function GetNowDateAndTimeAndWeekday {Get-Date -format "yyyy-MM-dd HH:mm:ss dddd"}
 function GetNowDateAndTimeThenCopyToClipboard {GetNowDateAndTime | Set-Clipboard}
+function Get-AppOneDriveSyncPath {param([string]$AppName); return (Join-Path $OneDriveRoot $AppName)}
 Set-Alias now GetNowDateAndTime
 Set-Alias cp-now GetNowDateAndTimeThenCopyToClipboard
 function AdbConnectWsa {adb connect 127.0.0.1:$WsaAdbPort}
@@ -74,6 +75,9 @@ function Get-CommandLocation {param([string]$CommandName);$Command = Get-Command
 Set-Alias where-cmd Get-CommandLocation
 Set-Alias show-verb Get-Verb # Has default alias "verb"
 Set-Alias verbs Get-Verb
+Set-Alias open Start-Process # emulate Mac open; open = Start-Process = explorer
+function Stop-ApplicationByDir {param([string]$Path); Get-Process | Where-Object {$_.Path -eq $Path} | Stop-Process}
+Set-Alias shut Stop-ApplicationByDir
 
 ### Load customized user scripts and modules
 function Invoke-CustomModules {
