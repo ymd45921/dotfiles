@@ -7,3 +7,5 @@ MacOS/**/*.md
 .DS_Store
 .vscode
 *.log
+
+Microsoft.WinGet.Client/*

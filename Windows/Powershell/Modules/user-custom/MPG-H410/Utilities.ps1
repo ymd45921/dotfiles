@@ -102,16 +102,16 @@ function Add-WindowsDefenderExclusionRule {
 ### Process output of `winget search --source=msstore`
 function Import-WinGet {
     $Name = "Microsoft.WinGet.Client"
-    if (-not Test-Module $Name) {
+    if (-not $(Test-Module $Name)) {
         Import-Module $Name
-        if (-not Test-Module $Name) {
+        if (-not $(Test-Module $Name)) {
             Install-Module $Name
             Import-Module $Name
-            if (-not Test-Module $Name) {
+            if (-not $(Test-Module $Name)) {
                 Repair-WinGetPackageManager
                 Install-Module $Name
                 Import-Module $Name
-                return Test-Module $Name
+                return (Test-Module $Name)
             } 
         }
     }

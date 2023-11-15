@@ -61,12 +61,12 @@ Set-Alias hash Get-FileHash
 ### Alias for scripts and functions
 function ShowWlanBssid {netsh wlan show networks mode=bssid}
 Set-Alias wlan-bssid ShowWlanBssid
-function GetNowDateAndTime {Get-Date -format "yyyy-MM-dd HH:mm:ss"}
-function GetNowDateAndTimeAndWeekday {Get-Date -format "yyyy-MM-dd HH:mm:ss dddd"}
-function GetNowDateAndTimeThenCopyToClipboard {GetNowDateAndTime | Set-Clipboard}
+function Get-NowDateAndTime {Get-Date -format "yyyy-MM-dd HH:mm:ss"}
+function Get-NowDateAndTimeAndWeekday {Get-Date -format "yyyy-MM-dd HH:mm:ss dddd"}
+function Get-NowDateAndTimeThenCopyToClipboard {Get-NowDateAndTime | Set-Clipboard}
 function Get-AppOneDriveSyncPath {param([string]$AppName); return (Join-Path $OneDriveRoot $AppName)}
-Set-Alias now GetNowDateAndTime
-Set-Alias cp-now GetNowDateAndTimeThenCopyToClipboard
+Set-Alias now Get-NowDateAndTime
+Set-Alias cp-now Get-NowDateAndTimeThenCopyToClipboard
 function AdbConnectWsa {adb connect 127.0.0.1:$WsaAdbPort}
 Set-Alias adb-wsa AdbConnectWsa
 function StartOpenSSHServer {Start-Service sshd}
