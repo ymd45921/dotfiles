@@ -1,5 +1,11 @@
 ### 核心功能
 $PowershellCoreProfile = Join-Path $env:USERPROFILE "/Documents/Powershell/Microsoft.Powershell_profile.ps1"
+if (Test-Administrator) {
+    Set-ExecutionPolicy -Scope AllUsers -ExecutionPolicy RemoteSigned
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+} else {
+    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+}
 function Set-Proxy {
     $Env:http_proxy="$HttpProxy";
     $Env:https_proxy="$HttpProxy";
@@ -33,6 +39,7 @@ function Get-NowDateAndTime {
     Set-Clipboard $now
     return $now
 }
+
 
 ### 核心别名
 Set-Alias Test-Module Test-ModuleImported
