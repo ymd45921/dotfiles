@@ -1,20 +1,45 @@
-### 核心功能
 $PowershellCoreProfile = Join-Path $env:USERPROFILE "/Documents/Powershell/Microsoft.Powershell_profile.ps1"
+$PowershellEncoding = $OutputEncoding.EncodingName # ! Powershell 使用 US_ASCII 编码，UTF-8 脚本中的中文会乱码
 function Test-AdminPrivilege {
     ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
-} 
+}
 # * Windows Powershell 中不包含 Test-Administrator
 Set-Alias Test-Administrator Test-AdminPrivilege
-if (Test-Administrator) {
-    Set-ExecutionPolicy -Scope AllUsers -ExecutionPolicy RemoteSigned
-    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
-} else {
-    Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+if (-not ($(Get-ExecutionPolicy -Scope CurrentUser) -eq "RemoteSigned")) {
+    if (Test-Administrator) {
+        Set-ExecutionPolicy -Scope AllUsers -ExecutionPolicy RemoteSigned
+        Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+    } else {
+        Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
+    }
 }
+if ($(Get-ExecutionPolicy -Scope Process) -ne "RemoteSigned") {
+    Write-Host "当前进程 Powershell Desktop 的执行策略被覆写为 $(Get-ExecutionPolicy)"
+}
+### 核心功能
 function Set-Proxy {
+    param([object]$Value = $null)
+    $pattern = "^(https?|socks?[45])://[^\s/$.?#].[^\s]*$"
+    $regex = [System.Text.RegularExpressions.Regex]::new($pattern)
+    $HttpProxy = 'http://127.0.0.1:7890/'
+    if ($Value -is [string]) {
+        if ($regex.IsMatch($Value)) { $HttpProxy = $Value }
+        else {
+            Write-Error "$Value 不是一个合法的代理地址。"
+            return
+        }
+    } else if ($Value -is [Int]) { # ! 不正常工作
+        if (($Value -ge 0) -and ($Value -lt 65536)) {
+            $HttpProxy = "http://127.0.0.1:$Value"
+        } else {
+            Write-Error "$Value 不是一个合法的端口号。"
+            return
+        }
+    }
     $Env:http_proxy="$HttpProxy";
     $Env:https_proxy="$HttpProxy";
     $Env:all_proxy="$HttpProxy";
+    Write-Host "已设置当前终端代理地址为 $HttpProxy"
 }
 function Test-ModuleImported {
     param(

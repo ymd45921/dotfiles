@@ -7,7 +7,7 @@ $HttpProxy = 'http://127.0.0.1:7890'
 $FiddlerProxyPort = '8888'
 $OneDriveRoot = $env:OneDrive   # $env:OneDriveConsumer
 $PwshProfileDir = $PSScriptRoot
-$CustomModulesDir = Join-Path $PwshProfileDir '\Modules\user-custom'
+$CustomModulesDir = Join-Path $PSScriptRoot '\Modules\user-custom'
 $LocalCustomModulesDir = Join-Path $CustomModulesDir $env:COMPUTERNAME
 # $WinNetIPinWSL = $(Get-NetIPAddress -InterfaceAlias 'vEthernet (WSL)' -AddressFamily IPV4)
 

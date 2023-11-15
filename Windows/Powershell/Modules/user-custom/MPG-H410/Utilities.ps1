@@ -168,7 +168,7 @@ function Get-AppIdInWinStoreByWinGet {
     }
 }
 # Legacy parse winget.exe search msstore output.
-# todo Encoding issue.
+# todo Encoding issue. Powershell Desktop CN using US-ASCII
 function Format-WingetSearchOutput {
     param (
         [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
