@@ -99,6 +99,62 @@ function Add-WindowsDefenderExclusionRule {
     Set-MpPreference -ExclusionPath $existingExclusions
 }
 
+### Process output of `winget search --source=msstore`
+function Import-WinGet {
+    $Name = "Microsoft.WinGet.Client"
+    if (-not Test-Module $Name) {
+        Import-Module $Name
+        if (-not Test-Module $Name) {
+            Install-Module $Name
+            Import-Module $Name
+            if (-not Test-Module $Name) {
+                Repair-WinGetPackageManager
+                Install-Module $Name
+                Import-Module $Name
+                return Test-Module $Name
+            } 
+        }
+    }
+    return $true
+}
+function Process-CommandOutput {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Search
+    )
+
+    $output = winget search "$Search" --source=msstore
+    $lines = $output.Trim() -split "`r?`n" | ForEach-Object { $_.Trim() }
+
+    $result = @()
+    $foundSeparator = $false
+
+    for ($i = $lines.Count - 1; $i -ge 0; $i--) {
+        $line = $lines[$i]
+        $columns = $line -split '\s+'
+
+        if ($columns.Count -eq 3) {
+            $obj = [PSCustomObject]@{
+                Name = $columns[0]
+                ID = $columns[1]
+                Version = $columns[2]
+            }
+            $result += $obj
+        }
+        elseif ($columns[0] -eq '-') {
+            $foundSeparator = $true
+            break
+        }
+    }
+
+    if ($foundSeparator) {
+        $result = $result | Sort-Object -Property Name
+    }
+
+    return $result
+}
+
+
 ### Install fonts for current user
 # Will show system window & Cannot force install
 function Install-FontsForCurrentUser {

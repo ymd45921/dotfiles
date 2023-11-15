@@ -84,12 +84,22 @@ function Test-AdminPrivilege {([Security.Principal.WindowsPrincipal] [Security.P
 Set-Alias is-admin Test-AdminPrivilege
 function Start-AdminTerminal {Start-Process wt -Verb runAs} # Will open a new window. Any solution?
 Set-Alias su Start-AdminTerminal
+function Set-PowerShellExecutionPolicy {Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned}
 function Get-FileMD5 {param([string]$Path); return (Get-FileHash -Path $Path -Algorithm MD5).Hash}
 function Get-FileSHA1 {param([string]$Path); return (Get-FileHash -Path $Path -Algorithm SHA1).Hash}
 function Get-FileSHA256 {param([string]$Path); return (Get-FileHash -Path $Path -Algorithm SHA256).Hash}
 Set-Alias md5 Get-FileMD5
 Set-Alias sha1 Get-FileSHA1
 Set-Alias sha256 Get-FileSHA256
+function Test-ModuleImported {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+    $importedModules = Get-Module | Select-Object -ExpandProperty Name
+    return $importedModules -contains $Name
+}
+Set-Alias Test-Module Test-ModuleImported
 function Get-FileHashes {
     param (
         [Parameter(Position=0, Mandatory=$true)]
