@@ -39,12 +39,15 @@ function GetWsaNetHostIP {adb connect 127.0.0.1:$WsaAdbPort | Out-Null; adb shel
 function SetWsaProxy {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$(GetWsaNetHostIP):$MixinProxyPort"}
 function RemoveWsaProxy {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy :0}
 function SetWsaFiddler {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$(GetWsaNetHostIP):$FiddlerProxyPort"}
+function Set-Proxy {$Env:http_proxy="$HttpProxy";$Env:https_proxy="$HttpProxy";$Env:all_proxy="$HttpProxy"}
+Set-Alias Set-TerminalProxy Set-Proxy
 Set-Alias yarn-proxy SetYarnProxyHttp
 Set-Alias npm-proxy SetNpmProxyHttp
 Set-Alias pnpm-proxy SetPnpmProxyHttp
 Set-Alias git-proxy SetGitProxySocks5
 Set-Alias wsa-proxy SetWsaProxy
 Set-Alias wsa-fiddler SetWsaFiddler
+Set-Alias proxy Set-Proxy
 
 ### Alias for utilities
 Set-Alias reboot Restart-Computer
