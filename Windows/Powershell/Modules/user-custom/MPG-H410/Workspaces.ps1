@@ -11,10 +11,13 @@ function GetUpyunDefaultBucket {upx get / $UpyunSyncDir}
 Set-Alias backup-upyun GetUpyunDefaultBucket
 function StartLocalImageServer {serve $UpyunSyncDir -p 80}
 Set-Alias img-shiraha StartLocalImageServer
-function SyncOhMyDotfilesWindows {&(Join-Path $OhMyDotfilesDir "Windows/backup.ps1")}
-function UpdateOhMyDotfilesWindows {&(Join-Path $OhMyDotfilesDir "Windows/recover.ps1")}
-Set-Alias omd-backup SyncOhMyDotfilesWindows
-Set-Alias omd-recover UpdateOhMyDotfilesWindows
+function Backup-OhMyDotfiles {&(Join-Path $OhMyDotfilesDir "Windows/backup.ps1")}
+function Restore-OhMyDotfiles {&(Join-Path $OhMyDotfilesDir "Windows/recover.ps1")}
+Set-Alias omd-backup Backup-OhMyDotfiles
+Set-Alias omd-recover Restore-OhMyDotfiles
+Set-Alias omd-restore Restore-OhMyDotfiles
+Set-Alias backup-omd Backup-OhMyDotfiles
+Set-Alias restore-omd Restore-OhMyDotfiles
 
 ### Alias for workspace shortcuts
 function OpenBlogRepoWorkspace {code $BlogRepoDir}

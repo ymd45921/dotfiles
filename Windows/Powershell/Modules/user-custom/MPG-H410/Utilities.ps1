@@ -105,11 +105,11 @@ function Import-WinGet {
     if (-not $(Test-Module $Name)) {
         Import-Module $Name
         if (-not $(Test-Module $Name)) {
-            Install-Module $Name
+            Install-Module $Name -Scope AllUsers
             Import-Module $Name
             if (-not $(Test-Module $Name)) {
                 Repair-WinGetPackageManager
-                Install-Module $Name
+                Install-Module $Name -Scope AllUsers
                 Import-Module $Name
                 return (Test-Module $Name)
             } 
@@ -117,42 +117,86 @@ function Import-WinGet {
     }
     return $true
 }
-function Process-CommandOutput {
+Set-Alias Install-WinGet Import-WinGet
+function Get-AppIdInWinStoreByWinGet {
     param (
         [Parameter(Mandatory = $true)]
         [string]$Search
     )
 
-    $output = winget search "$Search" --source=msstore
-    $lines = $output.Trim() -split "`r?`n" | ForEach-Object { $_.Trim() }
-
-    $result = @()
-    $foundSeparator = $false
-
-    for ($i = $lines.Count - 1; $i -ge 0; $i--) {
-        $line = $lines[$i]
-        $columns = $line -split '\s+'
-
-        if ($columns.Count -eq 3) {
-            $obj = [PSCustomObject]@{
-                Name = $columns[0]
-                ID = $columns[1]
-                Version = $columns[2]
+    # https://github.com/microsoft/winget-cli/issues/3805#issuecomment-1778517008
+    # Only Powershell install for machine can use WinGet, not for user (Windows Store)
+    if ($(where-cmd pwsh) -ne "C:\Program Files\PowerShell\7\pwsh.exe") {
+        Write-Host "Only Powershell install for all users can use WinGet cmdlet."
+        Write-Host "Using fallback winget.exe to find..."
+        # Has encoding issue...
+        $output = winget search "$Search" --source=msstore
+        $lines = $output.Trim() -split "`r?`n" | ForEach-Object { $_.Trim() }
+        $result = @()
+        $foundSeparator = $false
+        for ($i = $lines.Count - 1; $i -ge 0; $i--) {
+            $line = $lines[$i]
+            $columns = $line -split '\s+'
+            if ($columns.Count -eq 3) {
+                $obj = [PSCustomObject]@{
+                    Name = $columns[0]
+                    ID = $columns[1]
+                    Version = $columns[2]
+                }
+                $result += $obj
             }
-            $result += $obj
+            elseif ($columns[0] -eq '-') {
+                $foundSeparator = $true
+                break
+            }
         }
-        elseif ($columns[0] -eq '-') {
-            $foundSeparator = $true
-            break
+        if ($foundSeparator) {
+            $result = $result | Sort-Object -Property Name
+        }
+        if ($result.length -gt 1) { return $result[1].ID }
+        else { Write-Error "Noting found!" }
+    } else {
+        try {
+            Import-WinGet
+            $result = Find-WinGetPackage -Name "$Search" -Source msstore
+            if ($result.length -eq 0) {
+                Write-Error "Noting found!"
+            } else { return $result[0].Id }
+        } catch {
+            Write-Error $_
         }
     }
-
-    if ($foundSeparator) {
-        $result = $result | Sort-Object -Property Name
-    }
-
-    return $result
 }
+# Legacy parse winget.exe search msstore output.
+# todo Encoding issue.
+function Format-WingetSearchOutput {
+    param (
+        [Parameter(Mandatory=$true, ValueFromPipeline=$true)]
+        [string]$SearchString
+    )
+    
+    $InputString = winget search "$SearchString" --source=msstore
+    $lines = $InputString -split "`r?`n"
+    $output = @()
+
+    for ($i = 1; $i -lt $lines.Count; $i++) {
+        $line = $lines[$i].Trim()
+        if (![string]::IsNullOrEmpty($line)) {
+            $cols = $line -split "\s+";
+            if ($cols.length -eq 3) {
+                if ($cols[1] -ne "ID") {
+                    $output += [PSCustomObject]@{
+                        Name = $cols[0]
+                        ID = $cols[1]
+                        Version = $cols[2]
+                    }
+                }
+            }
+        }
+    }
+    $output
+}
+
 
 
 ### Install fonts for current user

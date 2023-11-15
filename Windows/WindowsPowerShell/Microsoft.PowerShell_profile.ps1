@@ -1,5 +1,10 @@
 ### 核心功能
 $PowershellCoreProfile = Join-Path $env:USERPROFILE "/Documents/Powershell/Microsoft.Powershell_profile.ps1"
+function Test-AdminPrivilege {
+    ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+} 
+# * Windows Powershell 中不包含 Test-Administrator
+Set-Alias Test-Administrator Test-AdminPrivilege
 if (Test-Administrator) {
     Set-ExecutionPolicy -Scope AllUsers -ExecutionPolicy RemoteSigned
     Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned
