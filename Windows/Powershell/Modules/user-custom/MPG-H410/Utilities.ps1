@@ -270,7 +270,7 @@ function Install-FontsForCurrentUser {
     # ElseIf (!($File -eq $null)){ $Fonts.CopyHere($File) }
     if ($installed.length -gt 0) { 
         Write-Host "Installed following fonts: "
-        $installed | ForEach-Object { Write-Host $(Get-Relati$_.FullName) } 
+        $installed | ForEach-Object { Write-Host $(Get-RelativePath $_.FullName) } 
     }
 }
 Set-Alias Install-Fonts Install-FontsForCurrentUser
