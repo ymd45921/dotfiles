@@ -57,6 +57,7 @@ Set-Alias test-admin Test-AdminPrivilege
 Set-Alias show-verb Get-Verb # Has default alias "verb"
 Set-Alias verbs Get-Verb
 Set-Alias hash Get-FileHash
+Set-Alias webrq Invoke-WebRequest
 
 ### Alias for scripts and functions
 function ShowWlanBssid {netsh wlan show networks mode=bssid}
@@ -65,8 +66,10 @@ function Get-NowDateAndTime {Get-Date -format "yyyy-MM-dd HH:mm:ss"}
 function Get-NowDateAndTimeAndWeekday {Get-Date -format "yyyy-MM-dd HH:mm:ss dddd"}
 function Get-NowDateAndTimeThenCopyToClipboard {Get-NowDateAndTime | Set-Clipboard}
 function Get-AppOneDriveSyncPath {param([string]$AppName); return (Join-Path $OneDriveRoot $AppName)}
+function Get-TimeStamp { return (Get-Date).ToUniversalTime().Ticks }
 Set-Alias now Get-NowDateAndTime
 Set-Alias cp-now Get-NowDateAndTimeThenCopyToClipboard
+Set-Alias timestamp Get-TimeStamp
 function AdbConnectWsa {adb connect 127.0.0.1:$WsaAdbPort}
 Set-Alias adb-wsa AdbConnectWsa
 function StartOpenSSHServer {Start-Service sshd}

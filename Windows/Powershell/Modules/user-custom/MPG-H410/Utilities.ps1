@@ -197,8 +197,44 @@ function Format-WingetSearchOutput {
     $output
 }
 
-
-
+### Get Random String
+function Get-RandomString {
+    param([System.Int]$length = 10)
+    $characters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+    $randomString = -join ($characters | Get-Random -Count $length)
+    return $randomString
+}
+Set-Alias randstr Get-RandomString
+### Add Temp folder 
+function New-TemporaryDirectory {
+    param([string]$Name = "", [switch]$TimeStamp = $false)
+    if ($Name.length -eq 0) { $Name = "TempFolder$(Get-TimeStamp)" }
+    elseif ($TimeStamp) {$Name += $TimeStamp}
+    $tempFolderPath = New-Item -ItemType Directory -Path $env:TEMP -Name $Name
+    return $tempFolderPath
+}
+function New-TemporaryDirectoryPath {
+    param([string]$Name) 
+    return $(New-TemporaryDirectory -Name $Name -TimeStamp).Name
+}
+Set-Alias tmpdir New-TemporaryDirectory
+### Downloading file without using Invoke-WebRequest
+function Start-DownloadFile {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url,
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [string]$Name = ""
+    )
+    if ($Name.length -eq 0) {
+        $Name = [System.IO.Path]::GetFileName($Url)
+    }
+    $out = Join-Path $Path $Name
+    curl -LJ -o $out $Url
+}
+Set-Alias download Start-DownloadFile
+Set-Alias webdl Start-DownloadFile
 ### Install fonts for current user
 # Will show system window & Cannot force install
 function Install-FontsForCurrentUser {
