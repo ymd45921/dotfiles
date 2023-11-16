@@ -69,7 +69,28 @@ function Get-NowDateAndTime {
     Set-Clipboard $now
     return $now
 }
-
+function Start-DownloadFile { # @see:\Windows\PowerShell\Modules\user-custom\MPG-H410\Utilities.ps1
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url,
+        [string]$Path = $pwd.Path,
+        [string]$Name = "",
+        [System.Int32]$RetryCount = 3 
+    )
+    if ($Name.length -eq 0) {
+        $Name = [System.IO.Path]::GetFileName($Url)
+    }
+    $out = Join-Path $Path $Name
+    while ($RetryCount -gt 0) {
+        $RetryCount = $RetryCount - 1
+        curl.exe -LJ $Url -o $out
+        if ($LASTEXITCODE -eq 0) { break } # [boolean]$? in Powershell means last COMMAND
+        if ($RetryCount -ne 0) {
+            Write-Host "curl exit with code $LASTEXITCODE, retrying remains $RetryCount times"
+        } else { Write-Error "Download failed." }
+    }
+    return $out
+}
 
 ### 核心别名
 Set-Alias Test-Module Test-ModuleImported
@@ -85,4 +106,6 @@ Set-Alias reboot Restart-Computer
 Set-Alias alias Set-Alias
 Set-Alias verbs Get-Verb
 Set-Alias proxy Set-Proxy
+Set-Alias exar Expand-Archive
+Set-Alias extract Expand-Archive
 Set-Alias reload $PROFILE

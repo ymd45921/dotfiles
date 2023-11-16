@@ -58,6 +58,8 @@ Set-Alias show-verb Get-Verb # Has default alias "verb"
 Set-Alias verbs Get-Verb
 Set-Alias hash Get-FileHash
 Set-Alias webrq Invoke-WebRequest
+Set-Alias exar Expand-Archive
+Set-Alias extract Expand-Archive
 
 ### Alias for scripts and functions
 function ShowWlanBssid {netsh wlan show networks mode=bssid}
@@ -94,6 +96,43 @@ function Get-FileSHA256 {param([string]$Path); return (Get-FileHash -Path $Path 
 Set-Alias md5 Get-FileMD5
 Set-Alias sha1 Get-FileSHA1
 Set-Alias sha256 Get-FileSHA256
+function Get-RelativePath {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [string]$BasePath = ""
+    )
+    if ($BasePath.length -eq 0) {
+        return Resolve-Path $Path -Relative
+    } else {
+        $_dir = $(Get-Location).Path
+        Set-Location $BasePath
+        if (-not $?) { Set-Location $_dir }
+        $_ret = Resolve-Path $Path -Relative
+        Set-Location $_dir
+        return $_ret
+    }
+}
+function Start-Download {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Url,
+        [string]$To = $null,
+        [System.Int32]$RetryCount = 3 
+    )
+    if (($To -eq $null) -or ($To.length -eq 0)) {
+        $out = Join-Path $(Get-Location).Path [System.IO.Path]::GetFileName($Url)
+    } else { $out = $To }
+    while ($RetryCount -gt 0) {
+        $RetryCount = $RetryCount - 1
+        curl.exe -LJ $Url -o $out
+        if ($LASTEXITCODE -eq 0) { break } # (-not $?)
+        elseif ($RetryCount -ne 0) {
+            Write-Host "curl.exe exit with code $LASTEXITCODE, retrying remains $RetryCount times..."
+        } else { $out = ""; Write-Error "Download failed." } # Set $? = $false
+    }
+    return $out
+}
 function Test-ModuleImported {
     param(
         [Parameter(Mandatory = $true)]

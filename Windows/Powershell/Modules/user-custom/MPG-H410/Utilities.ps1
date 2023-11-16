@@ -209,13 +209,13 @@ Set-Alias randstr Get-RandomString
 function New-TemporaryDirectory {
     param([string]$Name = "", [switch]$TimeStamp = $false)
     if ($Name.length -eq 0) { $Name = "TempFolder$(Get-TimeStamp)" }
-    elseif ($TimeStamp) {$Name += $TimeStamp}
+    if ($TimeStamp) {$Name += $(Get-TimeStamp)}
     $tempFolderPath = New-Item -ItemType Directory -Path $env:TEMP -Name $Name
     return $tempFolderPath
 }
 function New-TemporaryDirectoryPath {
     param([string]$Name) 
-    return $(New-TemporaryDirectory -Name $Name -TimeStamp).Name
+    return $(New-TemporaryDirectory -Name $Name -TimeStamp).FullName
 }
 Set-Alias tmpdir New-TemporaryDirectory
 ### Downloading file without using Invoke-WebRequest
@@ -223,15 +223,23 @@ function Start-DownloadFile {
     param(
         [Parameter(Mandatory = $true)]
         [string]$Url,
-        [Parameter(Mandatory = $true)]
-        [string]$Path,
-        [string]$Name = ""
+        [string]$Path = $pwd.Path,
+        [string]$Name = "",
+        [System.Int32]$RetryCount = 3 
     )
     if ($Name.length -eq 0) {
         $Name = [System.IO.Path]::GetFileName($Url)
     }
     $out = Join-Path $Path $Name
-    curl -LJ -o $out $Url
+    while ($RetryCount -gt 0) {
+        $RetryCount = $RetryCount - 1
+        curl.exe -LJ $Url -o $out
+        if ($LASTEXITCODE -eq 0) { break } # [boolean]$? in Powershell means last COMMAND
+        if ($RetryCount -ne 0) {
+            Write-Host "curl exit with code $LASTEXITCODE, retrying remains $RetryCount times"
+        } else { Write-Error "Download failed." }
+    }
+    return $out
 }
 Set-Alias download Start-DownloadFile
 Set-Alias webdl Start-DownloadFile
@@ -246,23 +254,30 @@ function Install-FontsForCurrentUser {
     )
     $objShell = New-Object -ComObject Shell.Application
     $Fonts = $objShell.NameSpace(20)
+    $installed = @()
     foreach ($Path in $Paths) {
         if ((Get-Item -Path $Path).PSIsContainer) {
             $Files = @()
-            $Files += Get-ChildItem -Path $Path -Filter *.ttf
-            $Files += Get-ChildItem -Path $Path -Filter *.otf
+            $Files += Get-ChildItem -Path $Path -Filter *.ttf -Recurse
+            $Files += Get-ChildItem -Path $Path -Filter *.otf -Recurse
             foreach ($File in $Files) {
                 $Fonts.CopyHere($File.FullName)
+                if ($?) { $installed += $File }
             }
         } else { $Fonts.CopyHere($Path) }
     }
-    If (!($Files -eq $null)){  Get-ChildItem "$Files\*.ttf" | ForEach-Object {$Fonts.CopyHere($_.FullName)} }
-    ElseIf (!($File -eq $null)){ $Fonts.CopyHere($File) }
+    # If (!($Files -eq $null)){  Get-ChildItem "$Files\*.ttf" | ForEach-Object {$Fonts.CopyHere($_.FullName)} }
+    # ElseIf (!($File -eq $null)){ $Fonts.CopyHere($File) }
+    if ($installed.length -gt 0) { 
+        Write-Host "Installed following fonts: "
+        $installed | ForEach-Object { Write-Host $(Get-Relati$_.FullName) } 
+    }
 }
 Set-Alias Install-Fonts Install-FontsForCurrentUser
 Set-Alias Add-Fonts Install-FontsForCurrentUser
 
 ### Get installed applications from registry
+# ? Alternative Get-WinGetPackage
 function Get-InstalledApps {
     $INSTALLED = Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Uninstall\* |  Select-Object DisplayName, DisplayVersion, Publisher, InstallDate
     $INSTALLED += Get-ItemProperty HKLM:\Software\Wow6432Node\Microsoft\Windows\CurrentVersion\Uninstall\* | Select-Object DisplayName, DisplayVersion, Publisher, InstallDate
@@ -363,5 +378,5 @@ function Install-AllFontsInDir {
     foreach ($FontItem in (Get-ChildItem -Path $FontsDir | 
         Where-Object {($_.Name -like '*.ttf') -or ($_.Name -like '*.otf') })) {  
     Install-Font -fontFile $FontItem.FullName  
-}  
+    }  
 }
