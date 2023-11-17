@@ -14,7 +14,7 @@ tar_backup_system() {
         --exclude=/dev --exclude=/tmp --exclude=/media --exclude="$OneDriveRoot"                \
         --exclude="$Home/.cache" --exclude="$Home/.ccache" --exclude="$Home/.gvfs"              \
         --exclude="$Home/.Private" --exclude="$Home/.var/app/*/cache" --exclude=/sys            \
-        --exclude=/var/cache/* --exclude=/mnt --exclude=/var/log --exclude=/swapfile            \
+        --exclude=/var/cache --exclude=/mnt --exclude=/var/log --exclude=/swapfile              \
         --exclude="/snap/*/*/.cache" --exclude="$Home/.local/share/Trash"                       \
         /
 }

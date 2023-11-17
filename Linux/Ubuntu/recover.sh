@@ -10,3 +10,4 @@ __dir=`dirname $0`
 cp $(JoinPath $__dir "zsh/.zshrc") ~/.zshrc 
 cp $(JoinPath $__dir "zsh/.bashrc") ~/.bashrc
 rsync -aq $(JoinPath $__dir "zsh/.oh-my-zsh/custom") ~/.oh-my-zsh/
+rsync -aq $(JoinPath $__dir "gnome-shell/theme") /usr/share/gnome-shell/
