@@ -34,11 +34,11 @@ function SetPnpmProxyHttp {pnpm config set proxy $HttpProxy; pnpm config set htt
 function RemoveYarnProxy {yarn config delete proxy; yarn config delete https-proxy}
 function RemoveNpmProxy {npm config delete proxy; npm config delete https-proxy}
 function RemovePnpmProxy {pnpm config delete proxy; pnpm config delete https-proxy}
-# function SetWsaProxyLegacy {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$($WinNetIPinWSL.IPAddress):$MixinProxyPort"}
-function GetWsaNetHostIP {adb connect 127.0.0.1:$WsaAdbPort | Out-Null; adb shell echo '`ip route list match 0 table all scope global | cut -F3`'}
-function SetWsaProxy {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$(GetWsaNetHostIP):$MixinProxyPort"}
-function RemoveWsaProxy {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy :0}
-function SetWsaFiddler {adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$(GetWsaNetHostIP):$FiddlerProxyPort"}
+function Confirm-AdbExists { if (-not $(Get-Command "adb" -ErrorAction SilentlyContinue)) { winget install --id Google.PlatformTools --source winget; exit } } # todo: refresh-env is need!
+function GetWsaNetHostIP {Confirm-AdbExists; adb connect 127.0.0.1:$WsaAdbPort | Out-Null; adb shell echo '`ip route list match 0 table all scope global | cut -F3`'}
+function SetWsaProxy {Confirm-AdbExists; adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$(GetWsaNetHostIP):$MixinProxyPort"}
+function RemoveWsaProxy {Confirm-AdbExists; adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy :0}
+function SetWsaFiddler {Confirm-AdbExists; adb connect 127.0.0.1:$WsaAdbPort; adb shell settings put global http_proxy "$(GetWsaNetHostIP):$FiddlerProxyPort"}
 function Set-Proxy {$Env:http_proxy="$HttpProxy";$Env:https_proxy="$HttpProxy";$Env:all_proxy="$HttpProxy"}
 Set-Alias Set-TerminalProxy Set-Proxy
 Set-Alias yarn-proxy SetYarnProxyHttp
