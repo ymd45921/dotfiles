@@ -286,6 +286,14 @@ function Get-InstalledApps {
 }
 Set-Alias allapp Get-InstalledApps
 
+### Auto update Powershell Core installed from winget
+#   Using legacy winget.exe 
+function Update-PowershellCore {
+    Set-Proxy && winget upgrade Microsoft.PowerShell --source=winget
+}
+Set-Alias pwsh-update Update-PowershellCore
+Set-Alias update-pwsh Update-PowershellCore
+
 #######################################################################################################################
 #######################################################################################################################
 #######################################################################################################################
