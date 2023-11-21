@@ -295,6 +295,7 @@ Set-Alias pwsh-update Update-PowershellCore
 Set-Alias update-pwsh Update-PowershellCore
 
 ### Search in Anime-sharing.com
+# ? number after /search/ is randomly generated?
 function Find-AnimeSharing {
     param(
         [Parameter(Mandatory = $true)]
