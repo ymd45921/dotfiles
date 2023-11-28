@@ -82,6 +82,7 @@ Set-Alias sshd-stop StopOpenSSHServer
 Set-Alias sshd-restart RestartOpenSSHServer
 function Get-CommandLocation {param([string]$CommandName);$Command = Get-Command $CommandName;$Command.Source}
 Set-Alias where-cmd Get-CommandLocation
+Set-Alias which Get-CommandLocation
 Set-Alias open Start-Process # emulate Mac open; open = Start-Process = explorer
 function Stop-ApplicationByDir {param([string]$Path); Get-Process | Where-Object {$_.Path -eq $Path} | Stop-Process}
 Set-Alias shut Stop-ApplicationByDir

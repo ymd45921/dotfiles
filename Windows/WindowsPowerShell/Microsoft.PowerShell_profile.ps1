@@ -99,6 +99,7 @@ Set-Alias md5 Get-FileMD5
 Set-Alias sha256 Get-FileSHA256
 Set-Alias open Start-Process
 Set-Alias where-cmd Get-CommandLocation
+Set-Alias which Get-CommandLocation
 Set-Alias su Start-AdminTerminal
 Set-Alias is-admin Test-Administrator
 Set-Alias now Get-NowDateAndTime
