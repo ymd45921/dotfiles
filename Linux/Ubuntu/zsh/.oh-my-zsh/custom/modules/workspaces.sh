@@ -1,6 +1,7 @@
 OMD_DIR=~/Documents/my-dotfiles
 alias omd="code $OMD_DIR"
 alias acm="code ~/Documents/Electric-Circus"
+alias snippets="code ~/Documents/snippets-dorobo"
 alias restore-omd="$OMD_DIR/Linux/Ubuntu/recover.sh"
 alias backup-omd="$OMD_DIR/Linux/Ubuntu/backup.sh"
 alias omd-restore="$OMD_DIR/Linux/Ubuntu/recover.sh"
