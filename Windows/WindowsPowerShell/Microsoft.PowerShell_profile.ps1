@@ -109,3 +109,11 @@ Set-Alias proxy Set-Proxy
 Set-Alias exar Expand-Archive
 Set-Alias extract Expand-Archive
 Set-Alias reload $PROFILE
+
+### 如果环境变量中可以找到 Chocolatey，那么就加载 Chocolatey 的 Powershell 模块
+if ($env:ChocolateyInstall -ne $null) {
+    $ChocolateyProfile = "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+    if (Test-Path($ChocolateyProfile)) {
+    Import-Module "$ChocolateyProfile"
+    }
+}
