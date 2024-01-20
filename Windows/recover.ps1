@@ -2,7 +2,7 @@
 $PowershellCoreBackup = Join-Path $PSScriptRoot "/Powershell"
 $PowershellBackup = Join-Path $PSScriptRoot "/WindowsPowershell"
 $UserDocumentsDir = "$env:userprofile\Documents"
-$TerminalBackup = Join-Path $PSScriptRoot "/Terminal/settings.json"
+$TerminalBackup = Join-Path $PSScriptRoot "/Terminal/$env:COMPUTERNAME/settings.json"
 $TerminalDestination = Join-Path $env:LOCALAPPDATA "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 
 
