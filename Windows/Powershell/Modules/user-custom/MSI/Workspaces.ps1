@@ -1,0 +1,1 @@
+$OhMyDotfilesDir = 'A:\Source\my-dotfiles'

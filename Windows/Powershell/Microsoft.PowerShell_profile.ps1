@@ -170,11 +170,8 @@ function Initialize-CustomModules {
     . Invoke-CustomModules -Path $LocalCustomModulesDir
 }
 function Invoke-ScriptIfExists {
-    param([Parameter(Mandatory = $true)][string]$Path,[switch]$Verbose = $false);
-    if (Test-Path $Path) {
-        if ($Verbose) {Write-Host "Invoke script $Path"}
-        . $Path
-    }
+    param([Parameter(Mandatory = $true)][string]$Path);
+    if (Test-Path $Path) { . $Path }
 
 }
 . Initialize-CustomModules
