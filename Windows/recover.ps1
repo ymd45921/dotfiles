@@ -11,5 +11,7 @@ Copy-Item -Path $PowershellCoreBackup -Destination $UserDocumentsDir -Recurse -F
 Copy-Item -Path $PowershellBackup -Destination $UserDocumentsDir -Recurse -Force
 Copy-Item -Path $TerminalBackup -Destination $TerminalDestination -Force
 
+# // TODO: recover msys2
+
 ### Try refresh profile
 . $profile
