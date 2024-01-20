@@ -11,14 +11,6 @@ $CustomModulesDir = Join-Path $PSScriptRoot '\Modules\user-custom'
 $LocalCustomModulesDir = Join-Path $CustomModulesDir $env:COMPUTERNAME
 # $WinNetIPinWSL = $(Get-NetIPAddress -InterfaceAlias 'vEthernet (WSL)' -AddressFamily IPV4)
 
-### Initialize Oh-My-Posh Ver 3
-$OhMyPosh3Theme = Join-Path $PwshProfileDir '\themes\chips-modifiled.omp.json'
-oh-my-posh init pwsh --config $OhMyPosh3Theme | Invoke-Expression
-### Initialize Oh-My-Posh Ver 2
-# Import-Module posh-git
-# Import-Module oh-my-posh
-# Set-Theme robbyrussell
-
 ### Alias for configure Powershell profile
 function PwshProfile {open $profile}
 function ShowProfileMember {$profile | Get-Member}
@@ -177,5 +169,14 @@ function Initialize-CustomModules {
     . Invoke-CustomModules -Path $CustomModulesDir
     . Invoke-CustomModules -Path $LocalCustomModulesDir
 }
+function Invoke-ScriptIfExists {
+    param([Parameter(Mandatory = $true)][string]$Path,[switch]$Verbose = $false);
+    if (Test-Path $Path) {
+        if ($Verbose) {Write-Host "Invoke script $Path"}
+        . $Path
+    }
+
+}
 . Initialize-CustomModules
+. Invoke-ScriptIfExists -Path $PwshProfileDir\Microsoft.PowerShell_profile.$env:COMPUTERNAME.ps1
 Set-Alias reload $profile
