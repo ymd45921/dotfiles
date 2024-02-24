@@ -11,14 +11,6 @@ $CustomModulesDir = Join-Path $PSScriptRoot '\Modules\user-custom'
 $LocalCustomModulesDir = Join-Path $CustomModulesDir $env:COMPUTERNAME
 # $WinNetIPinWSL = $(Get-NetIPAddress -InterfaceAlias 'vEthernet (WSL)' -AddressFamily IPV4)
 
-### Initialize Oh-My-Posh Ver 3
-$OhMyPosh3Theme = Join-Path $PwshProfileDir '\themes\chips-modifiled.omp.json'
-oh-my-posh init pwsh --config $OhMyPosh3Theme | Invoke-Expression
-### Initialize Oh-My-Posh Ver 2
-# Import-Module posh-git
-# Import-Module oh-my-posh
-# Set-Theme robbyrussell
-
 ### Alias for configure Powershell profile
 function PwshProfile {open $profile}
 function ShowProfileMember {$profile | Get-Member}
@@ -162,6 +154,23 @@ function Get-FileHashes {
     $hashesObject = [PSCustomObject]$hashes
     return $hashesObject
 }
+function Add-WindowsDefenderExclusionRule {
+    param(
+        [Parameter(Position=0, ValueFromRemainingArguments=$true)]
+        [string[]]$Paths
+    )
+    if (-not $(Test-Administrator)) {
+        Write-Error "Adding Windows Defender exclusion rules requires admin privilege."
+        return
+    }
+    $existingExclusions = Get-MpPreference | Select-Object -ExpandProperty ExclusionPath
+    foreach ($path in $Paths) {
+        if (-not ($existingExclusions -contains $path)) {
+            $existingExclusions += $path
+        }
+    }
+    Set-MpPreference -ExclusionPath $existingExclusions
+}
 function Invoke-CommandAsAdmin { # ! not work
     param([Parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][string]$Command)
     Start-Process pwsh -Verb runAs -ArgumentList '-ExecutionPolicy Bypass -Command `"Invoke-Expression -Command ""$Command""`" '
@@ -178,5 +187,11 @@ function Initialize-CustomModules {
     . Invoke-CustomModules -Path $CustomModulesDir
     . Invoke-CustomModules -Path $LocalCustomModulesDir
 }
+function Invoke-ScriptIfExists {
+    param([Parameter(Mandatory = $true)][string]$Path);
+    if (Test-Path $Path) { . $Path }
+
+}
 . Initialize-CustomModules
+. Invoke-ScriptIfExists -Path $PwshProfileDir\Microsoft.PowerShell_profile.$env:COMPUTERNAME.ps1
 Set-Alias reload $profile

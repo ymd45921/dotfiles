@@ -80,25 +80,6 @@ function Compare-FileByHash {
     return (($hash1 -eq $hash2) -and ($md51 -eq $md52))
 }
 
-### Add exclusion path to Windows Defender
-function Add-WindowsDefenderExclusionRule {
-    param(
-        [Parameter(Position=0, ValueFromRemainingArguments=$true)]
-        [string[]]$Paths
-    )
-    if (-not $(Test-Administrator)) {
-        Write-Error "Adding Windows Defender exclusion rules requires admin privilege."
-        return
-    }
-    $existingExclusions = Get-MpPreference | Select-Object -ExpandProperty ExclusionPath
-    foreach ($path in $Paths) {
-        if (-not ($existingExclusions -contains $path)) {
-            $existingExclusions += $path
-        }
-    }
-    Set-MpPreference -ExclusionPath $existingExclusions
-}
-
 ### Process output of `winget search --source=msstore`
 function Import-WinGet {
     $Name = "Microsoft.WinGet.Client"

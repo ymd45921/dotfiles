@@ -106,58 +106,12 @@ source $ZSH/oh-my-zsh.sh
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
-alias cls="clear"
-alias explorer="open"
-alias dir="ls" # ls
-alias cd..="cd .."
 
-# Source all user custom modules
-# All *.sh files under ~/.oh-my-zsh/custom/modules/ will be loaded.
-check_and_source() {
-  echo "output $1"
-  if [ -f "$1" ]; then
-    source "$1"
-  fi
-}
-source_all_sh_files() {
-    local dir="$1"
-    if [ ! -d "$dir" ]; then
-        return 1    # 目录不存在
-    fi
-    for file in "$dir"/*.sh; do
-        if [ -f "$file" ]; then
-            source "$file"
-        fi
-    done
-}
-source_all_sh_files_recursive() {
-    local dir="$1"
-    if [ ! -d "$dir" ]; then
-        return 1
-    fi
-    # find "$dir" -type f -name "*.sh" -exec source {} \; # source is shell built-in command, cannot be used in -exec.
-    files=()
-    while IFS= read -r -d '' file; do
-      files+=("$file")
-    done < <(find "$dir" -type f -name "*.sh" -print0)
-    for file in "${files[@]}"; do
-      source "$file"
-    done
-}
-custom_modules_dir=~/.oh-my-zsh/custom/modules
-# source_all_sh_files_recursive "$custom_modules_dir"
-source_all_sh_files "$custom_modules_dir"
+alias reload="source ~/.zshrc"
+alias dir="ls"
+alias cd..="cd .."
+alias cls="clear"
+alias proxy="export https_proxy=http://127.0.0.1:7890 http_proxy=http://127.0.0.1:7890 all_proxy=socks5://127.0.0.1:7890"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
-
-test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
-
-# pnpm
-export PNPM_HOME="/Users/nnm/Library/pnpm"
-case ":$PATH:" in
-  *":$PNPM_HOME:"*) ;;
-  *) export PATH="$PNPM_HOME:$PATH" ;;
-esac
-# pnpm end

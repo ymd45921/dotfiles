@@ -2,7 +2,7 @@
 $PowershellCoreBackup = Join-Path $PSScriptRoot "/Powershell"
 $PowershellBackup = Join-Path $PSScriptRoot "/WindowsPowershell"
 $UserDocumentsDir = "$env:userprofile\Documents"
-$TerminalBackup = Join-Path $PSScriptRoot "/Terminal/settings.json"
+$TerminalBackup = Join-Path $PSScriptRoot "/Terminal/$env:COMPUTERNAME/settings.json"
 $TerminalDestination = Join-Path $env:LOCALAPPDATA "Packages\Microsoft.WindowsTerminal_8wekyb3d8bbwe\LocalState\settings.json"
 
 
@@ -10,6 +10,8 @@ $TerminalDestination = Join-Path $env:LOCALAPPDATA "Packages\Microsoft.WindowsTe
 Copy-Item -Path $PowershellCoreBackup -Destination $UserDocumentsDir -Recurse -Force
 Copy-Item -Path $PowershellBackup -Destination $UserDocumentsDir -Recurse -Force
 Copy-Item -Path $TerminalBackup -Destination $TerminalDestination -Force
+
+# // TODO: recover msys2
 
 ### Try refresh profile
 . $profile

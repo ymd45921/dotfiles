@@ -10,4 +10,5 @@ function JoinPath() {
 __dir=`dirname $0`
 
 cp $(JoinPath $__dir "zsh/.zshrc") ~/.zshrc 
+cp $(JoinPath $__dir "zsh/.p10k.zsh") ~/.p10k.zsh
 rsync -aq $(JoinPath $__dir "zsh/.oh-my-zsh/custom") ~/.oh-my-zsh/

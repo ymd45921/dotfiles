@@ -18,5 +18,12 @@ function New-DirectoryRecursively {
 ### Run copy
 Copy-Item -Path $PowershellCoreProfileDir -Destination $PSScriptRoot -Recurse -Force
 Copy-Item -Path $PowershellProfileDir -Destination $PSScriptRoot -Recurse -Force
-New-DirectoryRecursively -Path (Join-Path $PSScriptRoot "/Terminal/")
-Copy-Item -Path $TerminalSettingsPath -Destination (Join-Path $PSScriptRoot "/Terminal/") -Force
+New-DirectoryRecursively -Path (Join-Path $PSScriptRoot "/Terminal/$env:COMPUTERNAME/")
+Copy-Item -Path $TerminalSettingsPath -Destination (Join-Path $PSScriptRoot "/Terminal/$env:COMPUTERNAME/") -Force
+
+if ($MSYS2_HOME -ne $null) {
+    $msys2_userprofile = Join-Path $MSYS2_HOME "/home/$env:USERNAME"
+    $msys2_backup_root = Join-Path $PSScriptRoot "/MSYS2/$env:COMPUTERNAME"
+    New-DirectoryRecursively -Path $(Join-Path $msys2_backup_root "zsh")
+    Copy-Item -Path $(Join-Path $msys2_userprofile ".zshrc") -Destination $(Join-Path $msys2_backup_root "zsh/.zshrc") -Force
+}
