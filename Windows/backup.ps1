@@ -24,6 +24,10 @@ Copy-Item -Path $TerminalSettingsPath -Destination (Join-Path $PSScriptRoot "/Te
 if ($MSYS2_HOME -ne $null) {
     $msys2_userprofile = Join-Path $MSYS2_HOME "/home/$env:USERNAME"
     $msys2_backup_root = Join-Path $PSScriptRoot "/MSYS2/$env:COMPUTERNAME"
-    New-DirectoryRecursively -Path $(Join-Path $msys2_backup_root "zsh")
+    New-DirectoryRecursively -Path $(Join-Path $msys2_backup_root "zsh/host_userprofile")
     Copy-Item -Path $(Join-Path $msys2_userprofile ".zshrc") -Destination $(Join-Path $msys2_backup_root "zsh/.zshrc") -Force
+    if (Test-Path $(Join-Path $msys2_userprofile ".p10k.zsh")) {
+        Copy-Item -Path $(Join-Path $msys2_userprofile ".p10k.zsh") -Destination $(Join-Path $msys2_backup_root "zsh/.p10k.zsh") -Force
+    }
+    # Copy-Item -Path $(Join-Path $env:USERPROFILE ".zshrc") -Destination $(Join-Path $msys2_backup_root "zsh/host_userprofile/.zshenv") -Force
 }

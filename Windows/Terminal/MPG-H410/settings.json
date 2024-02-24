@@ -115,6 +115,13 @@
                 "hidden": true,
                 "name": "Ubuntu-22.04",
                 "source": "Windows.Terminal.Wsl"
+            },
+            {
+                "commandline": "C:/Apps/msys64/msys2_shell.cmd -mingw64 -defterm -no-start -use-full-path -here -shell zsh",
+                "guid": "{9a724533-0b3b-4eab-90a9-259d4e116160}",
+                "hidden": false,
+                "icon": "C:\\Apps\\msys64\\msys2.ico",
+                "name": "MSYS2 zsh"
             }
         ]
     },
