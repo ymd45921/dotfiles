@@ -25,7 +25,6 @@ function Start-Msys2WithZsh {
 Set-Alias msys2 Start-Msys2
 Set-Alias zsh Start-Msys2WithZsh
 
-### Connect parts of MSYS2 user profile with windows
 function Reset-Msys2UserProfileSymbolicLink {
     param([switch]$Force = $false);
     $SYMLINK_ITEMS = @('.bashrc', '.bash_profile', '.profile', '.zshrc', '.zprofile', '.p10k.zsh', '.oh-my-zsh');

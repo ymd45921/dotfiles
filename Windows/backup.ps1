@@ -31,3 +31,8 @@ if ($MSYS2_HOME -ne $null) {
     }
     # Copy-Item -Path $(Join-Path $env:USERPROFILE ".zshrc") -Destination $(Join-Path $msys2_backup_root "zsh/host_userprofile/.zshenv") -Force
 }
+
+if (Test-Path (Join-Path $env:ProgramData "ssh\sshd_config")) {
+    New-DirectoryRecursively -Path $(Join-Path $PSScriptRoot "/ssh/$env:COMPUTERNAME/")
+    Copy-Item -Path (Join-Path $env:ProgramData "ssh\sshd_config") -Destination (Join-Path $PSScriptRoot "/ssh/$env:COMPUTERNAME/sshd_config") -Force
+}
