@@ -120,5 +120,12 @@ alias dir="ls"
 alias cd..="cd .."
 alias cls="clear"
 
+for i in {A..Z}; do
+  alias $i:="cd $i:"
+done
+for i in {a..z}; do
+  alias $i:="cd /$i"
+done
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
