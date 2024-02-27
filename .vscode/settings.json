@@ -72,5 +72,8 @@
             "bold": false,
             "italic": false
         }
-    ]
+    ],
+    "code-runner.executorMap": {
+        "powershell": "pwsh -ExecutionPolicy ByPass -File"
+    }
 }

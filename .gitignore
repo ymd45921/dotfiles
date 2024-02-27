@@ -8,5 +8,6 @@ MacOS/**/*.md
 .vscode
 *.log
 .idea
+test
 
 Microsoft.WinGet.Client/*

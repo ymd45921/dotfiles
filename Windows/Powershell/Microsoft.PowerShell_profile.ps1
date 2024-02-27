@@ -2,23 +2,49 @@
 $UserProfile = $env:USERPROFILE;
 $MixinProxyPort = '7890'
 $WsaAdbPort = '58526'
-$Socks5Proxy = 'socks5://127.0.0.1:7890'
-$HttpProxy = 'http://127.0.0.1:7890'
+$ProxyServer = '127.0.0.1'
+$Socks5Proxy = "socks5://${ProxyServer}:7890"
+$HttpProxy = "http://${ProxyServer}:7890"
 $FiddlerProxyPort = '8888'
-$OneDriveRoot = $env:OneDrive   # $env:OneDriveConsumer
+$OneDriveRoot = $env:OneDriveConsumer
 $PwshProfileDir = $PSScriptRoot
 $CustomModulesDir = Join-Path $PSScriptRoot '\Modules\user-custom'
 $LocalCustomModulesDir = Join-Path $CustomModulesDir $env:COMPUTERNAME
-# $WinNetIPinWSL = $(Get-NetIPAddress -InterfaceAlias 'vEthernet (WSL)' -AddressFamily IPV4)
+
+### Utilities to load customized user scripts and modules
+function Invoke-CustomModules {
+    param([string]$Path,[switch]$Verbose);
+    $CustomModules = Get-ChildItem -Path $Path -Filter *.ps1;
+    if ($Verbose) {Write-Host $CustomModules}
+    foreach ($module in $CustomModules) {. $module.FullName}
+}
+function Initialize-CustomModules {
+    . Invoke-CustomModules -Path $CustomModulesDir
+    . Invoke-CustomModules -Path $LocalCustomModulesDir
+}
+function Invoke-ScriptIfExists {
+    param([Parameter(Mandatory = $true)][string]$Path);
+    if (Test-Path $Path) { . $Path }
+
+}
 
 ### Alias for configure Powershell profile
-function PwshProfile {open $profile}
-function ShowProfileMember {$profile | Get-Member}
+function Open-Profile {open $profile}
 function OpenProfileDir {explorer $PwshProfileDir}
-Set-Alias ps-prof PwshProfile
+Set-Alias ps-prof Open-Profile
 Set-Alias profile $profile
 
 ### Alias for setting proxy
+function Get-WinNetHostIP {
+    $WinNetHostIP = '127.0.0.1'
+    try {
+        $WinNetHostIP = $(Get-NetIPAddress -InterfaceAlias 'vEthernet (WSL)' -AddressFamily IPV4 -ErrorAction Stop).IPAddress 
+    } catch {
+        # WSL winnet host is not exists.
+    }
+    return $WinNetHostIP
+}
+# todo: refactor proxy settings
 function SetGitProxySocks5 {git config --global http.proxy $Socks5Proxy; git config --global https.proxy $Socks5Proxy}
 function SetYarnProxyHttp {yarn config set proxy $HttpProxy; yarn config set https-proxy $HttpProxy}
 function SetNpmProxyHttp {npm config set proxy $HttpProxy; npm config set https-proxy $HttpProxy}
@@ -176,22 +202,7 @@ function Invoke-CommandAsAdmin { # ! not work
     Start-Process pwsh -Verb runAs -ArgumentList '-ExecutionPolicy Bypass -Command `"Invoke-Expression -Command ""$Command""`" '
 }
 
-### Load customized user scripts and modules
-function Invoke-CustomModules {
-    param([string]$Path,[switch]$Verbose);
-    $CustomModules = Get-ChildItem -Path $Path -Filter *.ps1;
-    if ($Verbose) {Write-Host $CustomModules}
-    foreach ($module in $CustomModules) {. $module.FullName}
-}
-function Initialize-CustomModules {
-    . Invoke-CustomModules -Path $CustomModulesDir
-    . Invoke-CustomModules -Path $LocalCustomModulesDir
-}
-function Invoke-ScriptIfExists {
-    param([Parameter(Mandatory = $true)][string]$Path);
-    if (Test-Path $Path) { . $Path }
 
-}
 . Initialize-CustomModules
 . Invoke-ScriptIfExists -Path $PwshProfileDir\Microsoft.PowerShell_profile.$env:COMPUTERNAME.ps1
 Set-Alias reload $profile
