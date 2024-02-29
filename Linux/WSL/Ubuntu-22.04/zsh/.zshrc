@@ -125,6 +125,10 @@ alias dir="ls"
 alias cd..="cd .."
 alias cls="clear"
 
+# Windows command line tools
+alias explorer="explorer.exe"
+alias notepad="notepad.exe"
+
 for i in {a..z}; do
   alias $i:="cd /mnt/$i"
 done
