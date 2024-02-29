@@ -125,6 +125,9 @@ alias dir="ls"
 alias cd..="cd .."
 alias cls="clear"
 
+for i in {a..z}; do
+  alias $i:="cd /mnt/$i"
+done
 proxy
 # Source all user custom modules
 # All *.sh files under ~/.oh-my-zsh/custom/modules/ will be loaded.
