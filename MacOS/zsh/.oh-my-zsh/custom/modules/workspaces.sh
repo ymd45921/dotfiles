@@ -7,7 +7,8 @@ BLOG_ROOT=$MY_WORKSPACES_ROOT/blog
 BLOG_DIR=$BLOG_ROOT/Hexo-ymd45921
 
 ### Workspaces aliases
-alias mpg="ssh i@lsz.ddns.net"
+alias mpg="ssh lsz.ddns.net"
+alias wsl="ssh lsz.ddns.net -p 2222"
 alias omd="code $OMD_DIR"
 alias acm="code $ACM_DIR"
 alias restore-omd="$OMD_DIR/MacOS/recover.sh"
