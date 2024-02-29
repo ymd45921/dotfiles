@@ -44,3 +44,15 @@ function Reset-Msys2UserProfileSymbolicLink {
         }
     }
 }
+
+# Fuctions related to WSL2 and SSH
+function Set-WslPortProxy {
+    param([string]$Port='2222');
+    $local:WSL_HOSTNAME = $(Get-WslIP)
+    $local:WSLL_SSH_PORT = $(wsl cat /etc/ssh/sshd_config | Select-String -Pattern 'Port (\d+)' | ForEach-Object { $_.Matches.Groups[1].Value })
+    netsh interface portproxy set v4tov4 listenport=$Port listenaddress=0.0.0.0 connectport=$local:WSLL_SSH_PORT connectaddress=$local:WSL_HOSTNAME
+    netsh advfirewall firewall add rule name=”Open Port $Port for WSL2” dir=in action=allow protocol=TCP localport=$Port
+}
+function Start-WslSshd {
+    wsl sudo service ssh start
+}

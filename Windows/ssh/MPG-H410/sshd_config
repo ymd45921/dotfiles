@@ -86,4 +86,5 @@ Subsystem	sftp	sftp-server.exe
 
 Match Group administrators
        AuthorizedKeysFile .ssh/authorized_keys
-       ForceCommand C:/Apps/msys64/msys2_shell.cmd -mingw64 -defterm -no-start -use-full-path -here -shell zsh
+       ForceCommand pwsh
+       # ForceCommand C:/Apps/msys64/msys2_shell.cmd -mingw64 -defterm -no-start -use-full-path -here -shell zsh

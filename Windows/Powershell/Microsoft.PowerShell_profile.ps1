@@ -44,6 +44,13 @@ function Get-WinNetHostIP {
     }
     return $WinNetHostIP
 }
+Set-Alias wslhost Get-WinNetHostIP
+function Get-WslIP {
+    # wsl.exe -d Ubuntu -e ip addr show eth0 | grep -oP '(?<=inet\s)\d+\.\d+\.\d+\.\d+'
+    wsl ifconfig eth0 | Select-String -Pattern 'inet ([\d\.]+)' | ForEach-Object { $_.Matches.Groups[1].Value }
+    # wsl hostname -I
+}
+Set-Alias wslip Get-WslIP
 # todo: refactor proxy settings
 function SetGitProxySocks5 {git config --global http.proxy $Socks5Proxy; git config --global https.proxy $Socks5Proxy}
 function SetYarnProxyHttp {yarn config set proxy $HttpProxy; yarn config set https-proxy $HttpProxy}
@@ -102,6 +109,7 @@ function Get-CommandLocation {param([string]$CommandName);$Command = Get-Command
 Set-Alias where-cmd Get-CommandLocation
 Set-Alias which Get-CommandLocation
 Set-Alias open Start-Process # emulate Mac open; open = Start-Process = explorer
+Set-Alias chmod attrib
 function Stop-ApplicationByDir {param([string]$Path); Get-Process | Where-Object {$_.Path -eq $Path} | Stop-Process}
 Set-Alias shut Stop-ApplicationByDir
 function Test-AdminPrivilege {([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)} # Test-Administrator
