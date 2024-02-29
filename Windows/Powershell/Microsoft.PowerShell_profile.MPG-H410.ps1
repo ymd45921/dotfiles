@@ -55,4 +55,5 @@ function Set-WslPortProxy {
 }
 function Start-WslSshd {
     wsl sudo service ssh start
+    Set-WslPortProxy
 }
