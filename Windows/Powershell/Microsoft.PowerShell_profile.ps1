@@ -214,3 +214,7 @@ function Invoke-CommandAsAdmin { # ! not work
 . Initialize-CustomModules
 . Invoke-ScriptIfExists -Path $PwshProfileDir\Microsoft.PowerShell_profile.$env:COMPUTERNAME.ps1
 Set-Alias reload $profile
+#34de4b3d-13a8-4540-b76d-b9e8d3851756 PowerToys CommandNotFound module
+
+Import-Module "C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1"
+#34de4b3d-13a8-4540-b76d-b9e8d3851756
