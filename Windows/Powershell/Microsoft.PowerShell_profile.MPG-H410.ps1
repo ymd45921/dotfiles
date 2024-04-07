@@ -9,6 +9,7 @@ oh-my-posh init pwsh --config $OhMyPosh3Theme | Invoke-Expression
 ### Set Environment Path
 $MSYS2_HOME = 'C:\Apps\msys64'
 $MSYS2_USERPROFILE = Join-Path $MSYS2_HOME "home\$env:USERNAME"
+$UE_PROJECT_ROOT = Join-Path $env:USERPROFILE "Documents\Unreal Projects"
 
 ### Functions related to environment?
 ### todo: move to generic profile?
@@ -57,3 +58,83 @@ function Start-WslSshd {
     wsl sudo service ssh start
     Set-WslPortProxy
 }
+
+# Cmdlets about Unreal Engine Projects
+function Get-UEProjectPath {
+    param([string]$Project);
+    $ProjectInfo = [PSCustomObject]@{
+        Name = $null
+        Directory = $null
+        ProjectFile = $null
+        SolutionFile = $null
+    } # note: should not modified unless ensure the project exists.
+    if (Test-Path $Project) { # input as a file or directory
+        if (-not (Get-Item $Project).PSIsContainer) {
+            $FileExtension = (Get-Item $Project).Extension
+            if ($FileExtension -eq ".sln") {
+                # todo: try find related .uproject file
+                throw "Not implemented yet"
+            } elseif ($FileExtension -ne ".uproject") {
+                throw "Invalid project file '$Project'"
+            }
+            $Project = (Get-Item $Project).DirectoryName
+        }
+    } elseif ($Project -match '[\\/]') {
+        # input is an invalid path, do not search
+        if ($Project -match '\.uproject$') {
+            $Project = (Get-Item $Project).DirectoryName
+            if (-not (Test-Path $Project)) {
+                throw "Invalid project path '$Project'"
+            }
+        }
+    } else { # todo: search project in an universal search path?
+        $Project = $Project -replace '\.uproject$'
+        $Project = Join-Path $UE_PROJECT_ROOT $Project
+        if (-not (Test-Path $Project)) {
+            throw "Project directory '$Project' not found"
+        }
+    }
+    # info: $Project is a directory may contain .uproject file
+    $BaseName = (Get-Item $Project).BaseName
+    $Project = (Get-Item $Project).FullName
+    if (Test-Path (Join-Path $Project "$BaseName.uproject")) {
+        $ProjectInfo.ProjectFile = Join-Path $Project "$BaseName.uproject"
+        $ProjectInfo.Name = $BaseName
+        $ProjectInfo.Directory = $Project
+    } else {
+        $uprojects = Get-ChildItem -Path $Project -Filter *.uproject
+        if ($uprojects.Count -eq 1) {
+            $ProjectInfo.ProjectFile = $uprojects[0].FullName
+            $ProjectInfo.Name = $uprojects[0].BaseName
+            $ProjectInfo.Directory = $uprojects[0].DirectoryName
+        } elseif ($uprojects.Count -gt 1) {
+            throw "Too many .uproject files found in '$Project'"
+        } else {
+            throw "No .uproject file found in '$Project'"
+        }
+    }
+    $Solution = Join-Path $Project "$BaseName.sln"
+    if (Test-Path $Solution) {
+        $ProjectInfo.SolutionFile = $Solution
+    }
+    return $ProjectInfo
+}
+function Open-UEProject {
+    param([string]$Project, [string]$Command = 'Start-Process');
+    $ProjectInfo = Get-UEProjectPath -Project $Project
+    $CommandInfo = Get-Command $Command
+    $CommandID = [System.IO.Path]::GetFileNameWithoutExtension($CommandInfo.Path).ToLower()
+    $CommandCanOpenUProject @( 'start-process',  'rider', 'unrealeditor' )
+    $CommandCanOpenSolution @( 'start-process', 'devenv', 'rider' )
+    $CommandCanOpenDirectory @( 'start-process', 'code', 'explorer', 'code-insiders', 'codium', 'devenv', 'rider'，'clion', 'unrealeditor' )
+    if (($ProjectInfo.ProjectFile -ne $null) -and ($CommandCanOpenUProject -contains $CommandID)) {
+        & $Command $ProjectInfo.ProjectFile
+    } elseif (($ProjectInfo.SolutionFile -ne $null) -and ($CommandCanOpenSolution -contains $CommandID)) {
+        & $Command $ProjectInfo.SolutionFile
+    } elseif ($CommandCanOpenDirectory -contains $CommandID) {
+        & $Command $ProjectInfo.Directory
+    } else {
+        throw "Command '$Command' is not supported for project '$Project'"
+    }
+}
+Set-Alias ue Open-UEProject

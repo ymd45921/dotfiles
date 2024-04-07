@@ -14,7 +14,7 @@ if (-not ($(Get-ExecutionPolicy -Scope CurrentUser) -eq "RemoteSigned")) {
     }
 }
 if ($(Get-ExecutionPolicy -Scope Process) -ne "RemoteSigned") {
-    Write-Host "当前进程 Powershell Desktop 的执行策略被覆写为 $(Get-ExecutionPolicy)"
+    # Write-Host "当前进程 Powershell Desktop 的执行策略被覆写为 $(Get-ExecutionPolicy)"
 }
 ### 核心功能
 function Set-Proxy {
