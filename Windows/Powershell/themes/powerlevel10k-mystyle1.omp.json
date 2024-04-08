@@ -15,8 +15,8 @@
           },
           {
             "background": "#0000ff",
-            "foreground": "#000000",
-            "powerline_symbol": "\ue0b4",
+            "foreground": "#0000ff",
+            "powerline_symbol": " \uea83",
             "properties": {
               "style": "full"
             },
