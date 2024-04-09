@@ -141,3 +141,5 @@ function Open-UEProject {
     }
 }
 Set-Alias ue Open-UEProject
+Set-Alias ue5 "C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\Win64\UnrealEditor.exe"
+Set-Alias ue4 "C:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UnrealEditor.exe"
