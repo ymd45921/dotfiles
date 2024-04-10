@@ -127,7 +127,7 @@ function Open-UEProject {
         $CommandInfo = Get-Command $CommandInfo.Definition
     }
     $CommandID = [System.IO.Path]::GetFileNameWithoutExtension($CommandInfo.Name).ToLower()
-    $CommandCanOpenUProject = @( 'start-process',  'rider', 'unrealeditor' )
+    $CommandCanOpenUProject = @( 'start-process',  'rider', 'unrealeditor', 'ue4editor' )
     $CommandCanOpenSolution = @( 'start-process', 'devenv', 'rider' )
     $CommandCanOpenDirectory = @( 'start-process', 'code', 'explorer', 'code-insiders', 'codium', 'devenv', 'rider', 'clion', 'unrealeditor' )
     if (($ProjectInfo.ProjectFile -ne $null) -and ($CommandCanOpenUProject -contains $CommandID)) {
@@ -142,7 +142,7 @@ function Open-UEProject {
 }
 Set-Alias ue Open-UEProject
 Set-Alias ue5 "C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\Win64\UnrealEditor.exe"
-Set-Alias ue4 "C:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UnrealEditor.exe"
+Set-Alias ue4 "C:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UE4Editor.exe"
 
 # Backup QQ emoji
 function Get-QQEmojiDirectory {
