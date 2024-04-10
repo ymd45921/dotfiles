@@ -86,6 +86,81 @@ Set-Alias webrq Invoke-WebRequest
 Set-Alias exar Expand-Archive
 Set-Alias extract Expand-Archive
 
+### Alias for Programs and Applications
+$ProgramFiles = $env:ProgramFiles
+$ProgramFilesX86 = ${env:ProgramFiles(x86)}
+function Get-CommandPath {
+    [CmdletBinding()] # Add Common Parameters like -ErrorAction to function
+    param( # ? any other important parameters pass to Get-Command?
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+    $Command = Get-Command $Name
+    while ($Command.CommandType -eq 'Alias') {
+        $Command = Get-Command $Command.Definition
+    }
+    if ($Command.CommandType -eq 'Application') {
+        return $Command.Source
+    }
+    return $Name # Type is 'Function' or 'Cmdlet'
+
+}
+# ! Tooooooo slow
+function Find-ProgramPath { # todo: uncompleted logic
+    param(
+        [string]$ProgramName,
+        [string[]]$Hint = @(),
+        [switch]$Verbose = $false
+    )
+    $ProgramPath = Get-CommandPath $ProgramName -ErrorAction SilentlyContinue
+    if ($ProgramPath) { return $ProgramPath }
+    if ($Hint.Length -eq 0) { $Hint = @($ProgramName) }
+    for ($i = 0; $i -lt $Hint.Length; $i++) {
+        $ProgramPath = Get-CommandPath $Hint[$i] -ErrorAction SilentlyContinue
+        if ($ProgramPath) { return $ProgramPath }
+        elseif ($Verbose) { Write-Host "Searching Command $Hint[$i]... Failed." }
+    }
+    $ExecutableExtensions = $env:PATHEXT.ToLower() -split ';'
+    for ($i = 0; $i -lt $Hint.Length; $i++) {
+        for ($j = 0; $j -lt $Hint.Length; $j++) {
+            for ($k = 0; $k -lt $ExecutableExtensions.Length; $k++) {
+                $TestPath = Join-Path $ProgramFiles $Hint[$i] "$Hint[$j]$ExecutableExtensions[$k]"
+                $ProgramPath = Get-CommandPath $TestPath -ErrorAction SilentlyContinue
+                if ($ProgramPath) { return $ProgramPath }
+                $TestPath = Join-Path $ProgramFilesX86 $Hint[$i] "$Hint[$j]$ExecutableExtensions[$k]"
+                $ProgramPath = Get-CommandPath $TestPath -ErrorAction SilentlyContinue
+                if ($ProgramPath) { return $ProgramPath }
+            }
+        }
+    }
+    return $null
+}
+# ! Also tooooo slow
+# $ProgramsToFind = @(
+#     @{ 
+#         Program = 'WinRAR' 
+#         Hint = @('Rar', 'WinRar') 
+#         Path = $null
+#     },
+#     @{ 
+#         Program = '7-Zip' 
+#         Hint = @('7z', '7-Zip') 
+#         Path = $null
+#     }
+# )
+# for ($i = 0; $i -lt $ProgramsToFind.Length; $i++) {
+#     $Program = $ProgramsToFind[$i]
+#     $Program.Path = Find-ProgramPath -ProgramName $Program.Program -Hint $Program.Hint
+#     if ($Program.Path) { 
+#         Set-Alias $Program.Program $Program.Path 
+#         if ($Program.Hint.Length -gt 0) {
+#             Set-Alias $Program.Hint[0] $Program.Path
+#         }
+#     }
+# }
+# $Program = $null
+# $ProgramsToFind = $null
+
 ### Alias for scripts and functions
 function ShowWlanBssid {netsh wlan show networks mode=bssid}
 Set-Alias wlan-bssid ShowWlanBssid
@@ -99,13 +174,16 @@ Set-Alias cp-now Get-NowDateAndTimeThenCopyToClipboard
 Set-Alias timestamp Get-TimeStamp
 function AdbConnectWsa {adb connect 127.0.0.1:$WsaAdbPort}
 Set-Alias adb-wsa AdbConnectWsa
-function StartOpenSSHServer {Start-Service sshd}
-function StopOpenSSHServer {Stop-Service sshd}
-function RestartOpenSSHServer {Restart-Service sshd}
-Set-Alias sshd-start StartOpenSSHServer
-Set-Alias sshd-stop StopOpenSSHServer
-Set-Alias sshd-restart RestartOpenSSHServer
-function Get-CommandLocation {param([string]$CommandName);$Command = Get-Command $CommandName;$Command.Source}
+function Start-OpenSSHServer {Start-Service sshd}
+function Stop-OpenSSHServer {Stop-Service sshd}
+function Restart-OpenSSHServer {Restart-Service sshd}
+Set-Alias sshd-start Start-OpenSSHServer
+Set-Alias sshd-stop Stop-OpenSSHServer
+Set-Alias sshd-restart Restart-OpenSSHServer
+function Get-CommandLocation { # which
+    param([string]$Name); $Command = Get-Command $CommandName;
+    $Command.CommandType -eq 'Application' ? $Command.Source : $Command.Name
+}
 Set-Alias where-cmd Get-CommandLocation
 Set-Alias which Get-CommandLocation
 Set-Alias open Start-Process # emulate Mac open; open = Start-Process = explorer

@@ -143,3 +143,29 @@ function Open-UEProject {
 Set-Alias ue Open-UEProject
 Set-Alias ue5 "C:\Program Files\Epic Games\UE_5.3\Engine\Binaries\Win64\UnrealEditor.exe"
 Set-Alias ue4 "C:\Program Files\Epic Games\UE_4.27\Engine\Binaries\Win64\UnrealEditor.exe"
+
+# Backup QQ emoji
+function Get-QQEmojiDirectory {
+    param([Parameter(Mandatory = $true)][string]$QQ)
+    $Dir = Join-Path $env:USERPROFILE "Documents\Tencent Files\$QQ\nt_qq\nt_data\Emoji\personal_emoji"
+    if (-not (Test-Path $Dir)) {
+        throw "QQ Emoji directory not found for QQ '$QQ'"
+    }
+    return $Dir
+}
+function Backup-QQEmoji {
+    param([Parameter(Mandatory = $true)][string]$QQ)
+    $QQEmojiDir = Get-QQEmojiDirectory -QQ $QQ
+    $BackupDir = Join-Path $OneDriveRoot "应用\QQ Emoji Backup\$QQ"
+    if (-not (Test-Path $BackupDir)) {
+        New-Item -ItemType Directory -Path $BackupDir
+    }
+    $ArchiveFilePath = Join-Path $BackupDir "emoji_$(Get-Date -Format 'yyyyMMdd_HHmmss').zip"
+    # todo: universal compress cmdlet using WinRAR and 7z?
+    Compress-Archive -Path $QQEmojiDir -DestinationPath $ArchiveFilePath -CompressionLevel Optimal 
+}
+function Remove-QQEmoji {
+    param([Parameter(Mandatory = $true)][string]$QQ)
+    $QQEmojiDir = Get-QQEmojiDirectory -QQ $QQ
+    Remove-Item -Path $QQEmojiDir -Recurse -Force
+}
