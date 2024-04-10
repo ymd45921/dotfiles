@@ -44,7 +44,7 @@
     {
         "defaults": 
         {
-            "colorScheme": "Bright",
+            "colorScheme": "Classic Bright",
             "font": 
             {
                 "face": "MesloLGM Nerd Font Mono",
@@ -57,13 +57,13 @@
         "list": 
         [
             {
-                "colorScheme": "Bright",
+                "colorScheme": "Classic Bright",
                 "guid": "{61c54bbd-c2c6-5271-96e7-009a87ff44bf}",
                 "hidden": true,
                 "name": "Windows PowerShell"
             },
             {
-                "colorScheme": "Bright",
+                "colorScheme": "Classic Bright",
                 "guid": "{0caa0dad-35be-5f56-a8ff-afceeeaa6101}",
                 "hidden": true,
                 "name": "\u547d\u4ee4\u63d0\u793a\u7b26"
@@ -77,7 +77,7 @@
             {
                 "backgroundImage": "C:\\Users\\ymd45\\OneDrive\\\u56fe\u7247\\\u914d\u7f6e\u7528\u56fe\u7247\u8d44\u6e90\\Windows Terminal\\Backgrounds\\ao.png",
                 "backgroundImageOpacity": 0.4,
-                "colorScheme": "Bright",
+                "colorScheme": "Classic Bright",
                 "guid": "{574e775e-4f2a-5b96-ac1e-a2962a402336}",
                 "hidden": false,
                 "name": "PowerShell",
@@ -93,10 +93,27 @@
                 "name": "MSYS2 zsh"
             },
             {
+                "colorScheme": "Raspberry Bright",
                 "guid": "{e5a83caa-4c73-52b3-ae6b-bc438d721ef9}",
                 "hidden": false,
                 "name": "Ubuntu 22.04.3 LTS",
                 "source": "CanonicalGroupLimited.Ubuntu22.04LTS_79rhkp1fndgsc"
+            },
+            {
+                "altGrAliasing": true,
+                "antialiasingMode": "grayscale",
+                "closeOnExit": "automatic",
+                "colorScheme": "Powershell Bright",
+                "commandline": "C:\\Windows\\SysWOW64\\WindowsPowerShell\\v1.0\\powershell.exe -noe -c \"&{Import-Module \"\"\"C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\Common7\\Tools\\Microsoft.VisualStudio.DevShell.dll\"\"\"; Enter-VsDevShell b7bd52ef}\"",
+                "cursorShape": "bar",
+                "guid": "{b4ffaec3-f044-437c-9a91-f1bd5561e601}",
+                "hidden": true,
+                "historySize": 9001,
+                "icon": "\ue756",
+                "name": "Developer PowerShell for VS 2022",
+                "padding": "8, 8, 8, 8",
+                "snapOnInput": true,
+                "startingDirectory": "%USERPROFILE%"
             }
         ]
     },
@@ -124,29 +141,6 @@
             "selectionBackground": "#F0EEE4",
             "white": "#FFFFFF",
             "yellow": "#F29718"
-        },
-        {
-            "background": "#0C0C0C",
-            "black": "#0C0C0C",
-            "blue": "#519DFF",
-            "brightBlack": "#ACACAC",
-            "brightBlue": "#8CC4FF",
-            "brightCyan": "#34E3E3",
-            "brightGreen": "#8BE334",
-            "brightPurple": "#FFBBF8",
-            "brightRed": "#E74856",
-            "brightWhite": "#FFFFFF",
-            "brightYellow": "#FFEC50",
-            "cursorColor": "#FFFFFF",
-            "cyan": "#0AFCFF",
-            "foreground": "#FCFCFC",
-            "green": "#81FF0A",
-            "name": "Bright",
-            "purple": "#F3A6FF",
-            "red": "#FF0000",
-            "selectionBackground": "#FFFFFF",
-            "white": "#FAFAFA",
-            "yellow": "#FFD000"
         },
         {
             "background": "#FFFFFF",
@@ -218,6 +212,29 @@
             "yellow": "#C19C00"
         },
         {
+            "background": "#0C0C0C",
+            "black": "#0C0C0C",
+            "blue": "#519DFF",
+            "brightBlack": "#ACACAC",
+            "brightBlue": "#8CC4FF",
+            "brightCyan": "#34E3E3",
+            "brightGreen": "#8BE334",
+            "brightPurple": "#FFBBF8",
+            "brightRed": "#E74856",
+            "brightWhite": "#FFFFFF",
+            "brightYellow": "#FFEC50",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#0AFCFF",
+            "foreground": "#FCFCFC",
+            "green": "#81FF0A",
+            "name": "Classic Bright",
+            "purple": "#F3A6FF",
+            "red": "#FF0000",
+            "selectionBackground": "#FFFFFF",
+            "white": "#FAFAFA",
+            "yellow": "#FFD000"
+        },
+        {
             "background": "#282C34",
             "black": "#282C34",
             "blue": "#61AFEF",
@@ -264,27 +281,50 @@
             "yellow": "#C18301"
         },
         {
-            "background": "#3C0315",
-            "black": "#282A2E",
-            "blue": "#0170C5",
-            "brightBlack": "#676E7A",
-            "brightBlue": "#80C8FF",
-            "brightCyan": "#8ABEB7",
-            "brightGreen": "#B5D680",
-            "brightPurple": "#AC79BB",
-            "brightRed": "#BD6D85",
-            "brightWhite": "#FFFFFD",
-            "brightYellow": "#FFFD76",
+            "background": "#012456",
+            "black": "#0C0C0C",
+            "blue": "#519DFF",
+            "brightBlack": "#ACACAC",
+            "brightBlue": "#8CC4FF",
+            "brightCyan": "#34E3E3",
+            "brightGreen": "#8BE334",
+            "brightPurple": "#FFBBF8",
+            "brightRed": "#E74856",
+            "brightWhite": "#FFFFFF",
+            "brightYellow": "#FFEC50",
             "cursorColor": "#FFFFFF",
-            "cyan": "#3F8D83",
-            "foreground": "#FFFFFD",
-            "green": "#76AB23",
-            "name": "Raspberry",
-            "purple": "#7D498F",
-            "red": "#BD0940",
+            "cyan": "#0AFCFF",
+            "foreground": "#FCFCFC",
+            "green": "#81FF0A",
+            "name": "Powershell Bright",
+            "purple": "#F3A6FF",
+            "red": "#FF0000",
             "selectionBackground": "#FFFFFF",
-            "white": "#FFFFFD",
-            "yellow": "#E0DE48"
+            "white": "#FAFAFA",
+            "yellow": "#FFD000"
+        },
+        {
+            "background": "#3C0315",
+            "black": "#0C0C0C",
+            "blue": "#519DFF",
+            "brightBlack": "#ACACAC",
+            "brightBlue": "#8CC4FF",
+            "brightCyan": "#34E3E3",
+            "brightGreen": "#8BE334",
+            "brightPurple": "#FFBBF8",
+            "brightRed": "#E74856",
+            "brightWhite": "#FFFFFF",
+            "brightYellow": "#FFEC50",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#0AFCFF",
+            "foreground": "#FCFCFC",
+            "green": "#81FF0A",
+            "name": "Raspberry Bright",
+            "purple": "#F3A6FF",
+            "red": "#FF0000",
+            "selectionBackground": "#FFFFFF",
+            "white": "#FAFAFA",
+            "yellow": "#FFD000"
         },
         {
             "background": "#002B36",
@@ -446,6 +486,29 @@
             "selectionBackground": "#D6D6D6",
             "white": "#FFFFFF",
             "yellow": "#EAB700"
+        },
+        {
+            "background": "#300A24",
+            "black": "#0C0C0C",
+            "blue": "#519DFF",
+            "brightBlack": "#ACACAC",
+            "brightBlue": "#8CC4FF",
+            "brightCyan": "#34E3E3",
+            "brightGreen": "#8BE334",
+            "brightPurple": "#FFBBF8",
+            "brightRed": "#E74856",
+            "brightWhite": "#FFFFFF",
+            "brightYellow": "#FFEC50",
+            "cursorColor": "#FFFFFF",
+            "cyan": "#0AFCFF",
+            "foreground": "#FCFCFC",
+            "green": "#81FF0A",
+            "name": "Ubuntu Bright",
+            "purple": "#F3A6FF",
+            "red": "#FF0000",
+            "selectionBackground": "#FFFFFF",
+            "white": "#FAFAFA",
+            "yellow": "#FFD000"
         },
         {
             "background": "#300A24",
