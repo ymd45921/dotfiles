@@ -123,13 +123,13 @@ function Open-UEProject {
     param([string]$Project, [string]$Command = 'Start-Process');
     $ProjectInfo = Get-UEProjectPath -Project $Project
     $CommandInfo = Get-Command $Command
-    if ($CommandInfo.CommandType -eq 'Alias') {
+    while ($CommandInfo.CommandType -eq 'Alias') {
         $CommandInfo = Get-Command $CommandInfo.Definition
     }
     $CommandID = [System.IO.Path]::GetFileNameWithoutExtension($CommandInfo.Name).ToLower()
     $CommandCanOpenUProject = @( 'start-process',  'rider', 'unrealeditor', 'ue4editor' )
     $CommandCanOpenSolution = @( 'start-process', 'devenv', 'rider' )
-    $CommandCanOpenDirectory = @( 'start-process', 'code', 'explorer', 'code-insiders', 'codium', 'devenv', 'rider', 'clion', 'unrealeditor' )
+    $CommandCanOpenDirectory = @( 'start-process', 'code', 'explorer', 'code-insiders', 'codium', 'devenv', 'rider', 'clion', 'unrealeditor', 'set-location' )
     if (($ProjectInfo.ProjectFile -ne $null) -and ($CommandCanOpenUProject -contains $CommandID)) {
         & $Command $ProjectInfo.ProjectFile
     } elseif (($ProjectInfo.SolutionFile -ne $null) -and ($CommandCanOpenSolution -contains $CommandID)) {
