@@ -180,8 +180,9 @@ function Restart-OpenSSHServer {Restart-Service sshd}
 Set-Alias sshd-start Start-OpenSSHServer
 Set-Alias sshd-stop Stop-OpenSSHServer
 Set-Alias sshd-restart Restart-OpenSSHServer
-function Get-CommandLocation { # which
-    param([string]$Name); $Command = Get-Command $CommandName;
+function Get-CommandLocation { # temporarily as which
+    param([string]$Name); $Command = Get-Command $Name;
+    while ($Command.CommandType -eq 'Alias') { $Command = Get-Command $Command.Definition }
     $Command.CommandType -eq 'Application' ? $Command.Source : $Command.Name
 }
 Set-Alias where-cmd Get-CommandLocation
