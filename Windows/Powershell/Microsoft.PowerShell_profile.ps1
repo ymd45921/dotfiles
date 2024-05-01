@@ -85,6 +85,8 @@ Set-Alias hash Get-FileHash
 Set-Alias webrq Invoke-WebRequest
 Set-Alias exar Expand-Archive
 Set-Alias extract Expand-Archive
+Set-Alias msedge "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" # or install from winget
+Set-Alias edge "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
 
 ### Alias for Programs and Applications
 $ProgramFiles = $env:ProgramFiles
