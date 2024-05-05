@@ -11,6 +11,10 @@ $PwshProfileDir = $PSScriptRoot
 $CustomModulesDir = Join-Path $PSScriptRoot '\Modules\user-custom'
 $LocalCustomModulesDir = Join-Path $CustomModulesDir $env:COMPUTERNAME
 
+# path to executables
+$OneDriveExecutable = "$env:ProgramFiles\Microsoft OneDrive\OneDrive.exe"
+$MsEdgeExecutable = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
+
 ### Utilities to load customized user scripts and modules
 function Invoke-CustomModules {
     param([string]$Path,[switch]$Verbose);
@@ -85,8 +89,9 @@ Set-Alias hash Get-FileHash
 Set-Alias webrq Invoke-WebRequest
 Set-Alias exar Expand-Archive
 Set-Alias extract Expand-Archive
-Set-Alias msedge "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe" # or install from winget
-Set-Alias edge "C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe"
+Set-Alias msedge $MsEdgeExecutable # or install from winget
+Set-Alias edge $MsEdgeExecutable
+Set-Alias onedrive $OneDriveExecutable
 
 ### Alias for Programs and Applications
 $ProgramFiles = $env:ProgramFiles
@@ -197,6 +202,11 @@ function Test-AdminPrivilege {([Security.Principal.WindowsPrincipal] [Security.P
 Set-Alias is-admin Test-AdminPrivilege
 function Start-AdminTerminal {Start-Process wt -Verb runAs} # Will open a new window. Any solution?
 Set-Alias su Start-AdminTerminal
+function Reset-OneDrive {
+    # Stop-Process -Name OneDrive -Force; 
+    &$OneDriveExecutable /reset
+    Start-Process -FilePath $OneDriveExecutable
+} # onedrive /reset
 function Set-PowerShellExecutionPolicy {Set-ExecutionPolicy -Scope CurrentUser -ExecutionPolicy RemoteSigned}
 function Get-FileMD5 {param([string]$Path); return (Get-FileHash -Path $Path -Algorithm MD5).Hash}
 function Get-FileSHA1 {param([string]$Path); return (Get-FileHash -Path $Path -Algorithm SHA1).Hash}
