@@ -119,6 +119,7 @@ alias reload="source ~/.zshrc"
 alias dir="ls"
 alias cd..="cd .."
 alias cls="clear"
+alias ~="cd /c/Users/i" # Windows User Home ($env:userprofile)
 
 for i in {A..Z}; do
   alias $i:="cd $i:"
