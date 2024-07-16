@@ -300,7 +300,22 @@ function Invoke-CommandAsAdmin { # ! not work
     param([Parameter(Mandatory = $true)][ValidateNotNullOrEmpty()][string]$Command)
     Start-Process pwsh -Verb runAs -ArgumentList '-ExecutionPolicy Bypass -Command `"Invoke-Expression -Command ""$Command""`" '
 }
-
+function Close-MonitorAsync {
+    Start-Job -ScriptBlock {
+        Add-Type -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
+    public class Monitor {
+        [DllImport("user32.dll", EntryPoint="SendMessage", CharSet=CharSet.Auto)]
+        public static extern IntPtr SendMessage(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        public static void TurnOff() {
+            SendMessage(-1, 0x0112, 0xF170, 2);
+        }
+    }
+"@
+    [Monitor]::TurnOff()
+    } | Out-Null
+}
 
 . Initialize-CustomModules
 . Invoke-ScriptIfExists -Path $PwshProfileDir\Microsoft.PowerShell_profile.$env:COMPUTERNAME.ps1

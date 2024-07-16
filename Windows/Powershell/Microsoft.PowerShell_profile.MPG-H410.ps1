@@ -169,3 +169,16 @@ function Remove-QQEmoji {
     $QQEmojiDir = Get-QQEmojiDirectory -QQ $QQ
     Remove-Item -Path $QQEmojiDir -Recurse -Force
 }
+
+# Close Monitor and Lock Screen.
+function Lock-Screen {
+    # Try use NirCmd first because faster and more reliable.
+    $nircmd = Get-Command -Name nircmd -ErrorAction SilentlyContinue
+    if ($null -ne $nircmd) {
+        & $nircmd monitor off
+    } else {
+        # ref: Microsoft.PowerShell_profile.ps1
+        Close-MonitorAsync
+    }
+}
+Set-Alias monitoroff Lock-Screen
