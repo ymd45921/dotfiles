@@ -160,4 +160,6 @@ case ":$PATH:" in
   *":$PNPM_HOME:"*) ;;
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
-# pnpm end
+# pnpm endexport PATH="$HOME/.jenv/bin:$PATH"
+eval "$(jenv init -)"
+eval "$(jenv init -)"
