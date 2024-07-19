@@ -316,6 +316,27 @@ function Close-MonitorAsync {
     [Monitor]::TurnOff()
     } | Out-Null
 }
+function Lock-WorkstationAsync {
+    Start-Job -ScriptBlock {
+        Add-Type -TypeDefinition @"
+    using System;
+    using System.Runtime.InteropServices;
+    public class LockWorkstation {
+        [DllImport("user32.dll", EntryPoint="LockWorkStation", CharSet=CharSet.Auto)]
+        public static extern bool Lock();
+    }
+"@
+    [LockWorkstation]::Lock()
+    } | Out-Null
+}
+function Lock-WorkstationAndTurnOffMonitor {
+    # param([switch]$LockFirst=$false)
+    # if ($LockFirst) { Close-MonitorAsync }
+    rundll32.exe user32.dll,LockWorkStation
+    Close-MonitorAsync
+}
+Set-Alias Lock-Workstation Lock-WorkstationAndTurnOffMonitor
+Set-Alias lock Lock-WorkstationAndTurnOffMonitor
 
 . Initialize-CustomModules
 . Invoke-ScriptIfExists -Path $PwshProfileDir\Microsoft.PowerShell_profile.$env:COMPUTERNAME.ps1
