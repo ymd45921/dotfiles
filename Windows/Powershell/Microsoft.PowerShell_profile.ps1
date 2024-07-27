@@ -330,10 +330,13 @@ function Lock-WorkstationAsync {
     } | Out-Null
 }
 function Lock-WorkstationAndTurnOffMonitor {
-    # param([switch]$LockFirst=$false)
-    # if ($LockFirst) { Close-MonitorAsync }
+    $nircmd = Get-Command -Name nircmd -ErrorAction SilentlyContinue
+    if ($null -ne $nircmd) {
+        & $nircmd monitor off
+    } else {
+        Close-MonitorAsync
+    }
     rundll32.exe user32.dll,LockWorkStation
-    Close-MonitorAsync
 }
 Set-Alias Lock-Workstation Lock-WorkstationAndTurnOffMonitor
 Set-Alias lock Lock-WorkstationAndTurnOffMonitor
@@ -341,6 +344,49 @@ Set-Alias lock Lock-WorkstationAndTurnOffMonitor
 . Initialize-CustomModules
 . Invoke-ScriptIfExists -Path $PwshProfileDir\Microsoft.PowerShell_profile.$env:COMPUTERNAME.ps1
 Set-Alias reload $profile
+
+# Setup-VSCodium
+function Install-VSCodium {
+    $codium = Get-Command -Name codium -ErrorAction SilentlyContinue
+    if ($null -eq $codium) {
+        Write-Host 'Installing VSCodium...'
+        winget install VSCodium.VSCodium | Out-Null
+        $VSCodium = "$env:ProgramFiles\VSCodium\VSCodium.exe"
+        if (-not (Test-Path $VSCodium)) {
+            $VSCodium = "${env:ProgramFiles(x86)}\VSCodium\VSCodium.exe"
+            if (-not (Test-Path $VSCodium)) {
+                $VSCodium = "${env:LocalAppData}\Programs\VSCodium\VSCodium.exe"
+            }
+        }
+    } else {
+        if ($codium.CommandType -eq 'Alias') {
+            $codium = Get-Command $codium.Definition
+        } 
+        if ($codium.Source -match '\.cmd$') {
+            $VSCodium = $(Resolve-Path -RelativeBasePath "$([System.IO.Path]::GetDirectoryName($codium.Source))" -Path "..\VSCodium.exe").Path
+        } else { # ? $codium.Source -match '\.exe$'
+            $VSCodium = $codium.Source
+        }
+    }
+    if (Test-Path $VSCodium) {
+        return $VSCodium
+    } else {
+        throw "VSCodium installation failed."
+    }
+}
+function Initialize-VSCodium {
+    $VSCodium = Install-VSCodium
+    $product = Join-Path "$([System.IO.Path]::GetDirectoryName($VSCodium))" "resources\app\product.json"
+    if (Test-Path $product) {
+        $productJson = Get-Content $product -Raw | ConvertFrom-Json
+        $productJson.extensionsGallery = @{
+            serviceUrl = 'https://marketplace.visualstudio.com/_apis/public/gallery'
+            itemUrl = 'https://marketplace.visualstudio.com/items'
+        }
+        $productJson | ConvertTo-Json -Depth 10 | Set-Content $product
+    }
+}
+
 #34de4b3d-13a8-4540-b76d-b9e8d3851756 PowerToys CommandNotFound module
 
 Import-Module "C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1"

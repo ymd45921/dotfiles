@@ -162,13 +162,18 @@ function Backup-QQEmoji {
     }
     $ArchiveFilePath = Join-Path $BackupDir "emoji_$(Get-Date -Format 'yyyyMMdd_HHmmss').zip"
     # todo: universal compress cmdlet using WinRAR and 7z?
-    Compress-Archive -Path $QQEmojiDir -DestinationPath $ArchiveFilePath -CompressionLevel Optimal 
+    Compress-Archive -Path $QQEmojiDir -DestinationPath $ArchiveFilePath -CompressionLevel Optimal
+    Write-Host "Backup stickers of QQ '$QQ' to '$ArchiveFilePath'."
+    Write-Host "You can clear cache by 'Clear-QQEmojiCache $QQ'."
 }
+Set-Alias Backup-QQStickers Backup-QQEmoji
 function Remove-QQEmoji {
     param([Parameter(Mandatory = $true)][string]$QQ)
     $QQEmojiDir = Get-QQEmojiDirectory -QQ $QQ
     Remove-Item -Path $QQEmojiDir -Recurse -Force
 }
+Set-Alias Clear-QQEmojiCache Remove-QQEmoji
+Set-Alias Clear-QQStickers Remove-QQEmoji
 
 # Close Monitor and Lock Screen.
 function Lock-Screen {

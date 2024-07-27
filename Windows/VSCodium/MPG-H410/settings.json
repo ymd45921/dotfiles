@@ -1,0 +1,13 @@
+{
+    "workbench.iconTheme": "vscode-icons",
+    "editor.fontFamily": "Rec Mono Linear, UbuntuMono Nerd Font Mono, Sarasa UI SC, Microsoft YaHei UI, PingFang SC, 宋体, Consolas, 'Courier New', monospace",
+    "editor.fontSize": 18,
+    "terminal.integrated.fontSize": 18,
+    "terminal.integrated.fontFamily": "UbuntuMono Nerd Font Mono, 宋体, Consolas, 'Courier New', monospace",
+    "files.autoSave": "afterDelay",
+    "security.workspace.trust.untrustedFiles": "open",
+    "editor.unicodeHighlight.nonBasicASCII": false,
+    "git.confirmSync": false,
+    "workbench.colorTheme": "GitHub Dark Default",
+    "github.copilot.editor.enableAutoCompletions": true
+}

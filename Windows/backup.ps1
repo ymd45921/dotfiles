@@ -36,3 +36,11 @@ if (Test-Path (Join-Path $env:ProgramData "ssh\sshd_config")) {
     New-DirectoryRecursively -Path $(Join-Path $PSScriptRoot "/ssh/$env:COMPUTERNAME/")
     Copy-Item -Path (Join-Path $env:ProgramData "ssh\sshd_config") -Destination (Join-Path $PSScriptRoot "/ssh/$env:COMPUTERNAME/sshd_config") -Force
 }
+
+### Backup VSCodium settings when installed (default profile)
+$codium = Get-Command -Name codium
+if ($null -ne $codium) {
+    New-DirectoryRecursively (Join-Path $PSScriptRoot "/VSCodium/$env:COMPUTERNAME/")
+    Copy-Item -Path "$env:APPDATA\VSCodium\User\settings.json" -Destination (Join-Path $PSScriptRoot "/VSCodium/$env:COMPUTERNAME/") -Force
+    &$codium --list-extensions | Out-File -FilePath (Join-Path $PSScriptRoot "/VSCodium/$env:COMPUTERNAME/extensions.txt") -Force
+}

@@ -1,0 +1,12 @@
+aaron-bond.better-comments
+donjayamanne.githistory
+GitHub.copilot
+GitHub.copilot-chat
+GitHub.github-vscode-theme
+jock.svg
+MS-CEINTL.vscode-language-pack-zh-hans
+ms-vscode.cmake-tools
+ms-vscode.cpptools
+ms-vscode.hexeditor
+twxs.cmake
+vscode-icons-team.vscode-icons

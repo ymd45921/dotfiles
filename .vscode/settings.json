@@ -1,6 +1,15 @@
 {
     "better-comments.tags": [
         {
+            "tag": "[todo)",
+            "color": "#FF8C00",
+            "strikethrough": false,
+            "underline": false,
+            "backgroundColor": "transparent",
+            "bold": false,
+            "italic": false
+        },
+        {
             "tag": "hint:",
             "color": "#FFFF00",
             "strikethrough": false,
@@ -55,7 +64,7 @@
             "italic": false
         },
         {
-            "tag": "todo:",
+            "tag": "todo",
             "color": "#FF8C00",
             "strikethrough": false,
             "underline": false,

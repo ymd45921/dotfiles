@@ -16,5 +16,17 @@ Copy-Item -Path $SshdConfigBackup -Destination $SshdConfigDestination -Force
 
 # // TODO: recover msys2
 
+### recover VSCodium settings when installed (default profile)
+# TODO)) Provide a way to skip this part.
+$codium = Get-Command -Name codium
+if ($null -ne $codium) {
+    $VSCodiumSettings = (Join-Path $PSScriptRoot "/VSCodium/$env:COMPUTERNAME/settings.json")
+    $VSCodiumExtensions = (Join-Path $PSScriptRoot "/VSCodium/$env:COMPUTERNAME/extensions.txt")
+    if ((Test-Path $VSCodiumSettings) -and (Test-Path $VSCodiumExtensions)) {
+        Copy-Item -Path $VSCodiumSettings -Destination "$env:APPDATA\VSCodium\User\settings.json" -Force
+        Get-Content -Path $VSCodiumExtensions | ForEach-Object { & $codium --install-extension $_ | Out-Null }
+    }
+}
+
 ### Try refresh profile
 . $profile
