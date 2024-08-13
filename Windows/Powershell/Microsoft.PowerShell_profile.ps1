@@ -501,6 +501,19 @@ function Set-LocalizedFolderName {
     # ([System.IO.FileAttributes]::System + [System.IO.FileAttributes]::Hidden) = 6
     Set-ItemProperty -Path $desktopIni -Name Attributes -Value ($desktopIniAttrib -bor 6)
 }
+function Set-DirectoryLocalName {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [string]$Name
+    )
+    if (-not $Name) {
+        $Name = $Path
+        $Path = $PWD
+    }
+    Set-LocalizedFolderName -Path $Path -Name $Name
+}
+Set-Alias setname Set-DirectoryLocalName
 
 #34de4b3d-13a8-4540-b76d-b9e8d3851756 PowerToys CommandNotFound module
 
