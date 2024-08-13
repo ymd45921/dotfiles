@@ -11,3 +11,7 @@ MacOS/**/*.md
 test
 
 Microsoft.WinGet.Client/*
+
+# Temporarily ignore WinGet modules
+Windows/PowerShell/Modules/Microsoft.WinGet.Client
+Windows/PowerShell/Modules/Microsoft.WinGet.CommandNotFound

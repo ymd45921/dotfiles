@@ -3,7 +3,9 @@ donjayamanne.githistory
 GitHub.copilot
 GitHub.copilot-chat
 GitHub.github-vscode-theme
+janisdd.vscode-edit-csv
 jock.svg
+mechatroner.rainbow-csv
 MS-CEINTL.vscode-language-pack-zh-hans
 ms-vscode.cmake-tools
 ms-vscode.cpptools
