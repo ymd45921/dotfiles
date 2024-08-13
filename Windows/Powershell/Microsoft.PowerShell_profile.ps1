@@ -387,6 +387,121 @@ function Initialize-VSCodium {
     }
 }
 
+# Simple parser to process *.ini files
+function Read-IniFile {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Path
+    )
+
+    if (-not (Test-Path $Path)) {
+        throw "File not found: $Path"
+    }
+
+    $ini = @{}
+    $section = ""
+
+    foreach ($line in Get-Content -Path $Path) {
+        $line = $line.Trim()
+        if ($line -match '^\[(.+)\]$') {
+            $section = $matches[1]
+            $ini[$section] = @{}
+        } elseif ($line -match '^(.*?)=(.*)$') {
+            $key = $matches[1].Trim()
+            $value = $matches[2].Trim()
+            $ini[$section][$key] = $value
+        }
+    }
+
+    return $ini
+}
+function Format-IniFile {
+    param (
+        [Parameter(Mandatory = $true)]
+        [hashtable]$Data
+    )
+
+    $content = ""
+    foreach ($section in $Data.Keys) {
+        $content += "[$section]`r`n"
+        foreach ($key in $Data[$section].Keys) {
+            $content += "$key=$($Data[$section][$key])`r`n"
+        }
+        $content += "`r`n"
+    }
+    return $content
+}
+function Write-IniFile {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [Parameter(Mandatory = $true)]
+        [hashtable]$Data,
+        [switch]$Force = $false,
+        [switch]$Append = $false,
+        [ValidateSet(
+            "Ascii", "BigEndianUnicode", "Byte", "Default", 
+            "OEM", "Unicode", "UTF7", "UTF8", "UTF8BOM", 
+            "UTF8NoBOM", "UTF32", IgnoreCase = $true
+        )]
+        [string]$Encoding = "OEM"
+    )
+
+    $content = Format-IniFile -Data $Data
+    if ($Append) {
+        Add-Content -Path $Path -Value $content -Encoding $Encoding
+    } else {
+        if ((Test-Path $Path) -and (-not $Force)) {
+            throw "File already exists: $Path"
+        }
+        Set-Content -Path $Path -Value $content -Encoding $Encoding
+    }
+}
+function Write-IniFileByASNI {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [Parameter(Mandatory = $true)]
+        [hashtable]$Data,
+        [switch]$Force = $false
+    )
+
+    $content = Format-IniFile -Data $Data
+    if ((Test-Path $Path) -and (-not $Force)) {
+        throw "File already exists: $Path"
+    }
+    # * It's seems OEM option will encode the content to ANSI.
+    Set-Content -Path $Path -Value $content -Encoding OEM
+}
+
+# Set Localized Name for a folder
+function Set-LocalizedFolderName {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+    if (-not (Test-Path $Path -PathType Container)) {
+        throw "Path is not a directory."
+    }
+    $desktopIni = Join-Path $Path 'desktop.ini'
+    $desktopIniObject = @{}
+    if (-not (Test-Path $desktopIni)) {
+        New-Item -Path $desktopIni -ItemType File | Out-Null
+    } else {
+        $desktopIniObject = Read-IniFile -Path $desktopIni
+    }
+    if (-not $desktopIniObject.ContainsKey('.ShellClassInfo')) {
+        $desktopIniObject['.ShellClassInfo'] = @{}
+    }
+    $desktopIniObject['.ShellClassInfo']['LocalizedResourceName'] = $Name
+    Write-IniFileByANSI -Path $desktopIni -Data $desktopIniObject -Force
+    $desktopIniAttrib = (Get-ItemProperty -Path $desktopIni -Name Attributes).Attributes
+    # ([System.IO.FileAttributes]::System + [System.IO.FileAttributes]::Hidden) = 6
+    Set-ItemProperty -Path $desktopIni -Name Attributes -Value ($desktopIniAttrib -bor 6)
+}
+
 #34de4b3d-13a8-4540-b76d-b9e8d3851756 PowerToys CommandNotFound module
 
 Import-Module "C:\Program Files\PowerToys\WinUI3Apps\..\WinGetCommandNotFound.psd1"
