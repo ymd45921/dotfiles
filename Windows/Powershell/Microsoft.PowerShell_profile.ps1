@@ -457,7 +457,7 @@ function Write-IniFile {
         Set-Content -Path $Path -Value $content -Encoding $Encoding
     }
 }
-function Write-IniFileByASNI {
+function Write-IniFileByANSI {
     param (
         [Parameter(Mandatory = $true)]
         [string]$Path,
@@ -501,6 +501,7 @@ function Set-LocalizedFolderName {
     # ([System.IO.FileAttributes]::System + [System.IO.FileAttributes]::Hidden) = 6
     Set-ItemProperty -Path $desktopIni -Name Attributes -Value ($desktopIniAttrib -bor 6)
 }
+# ! not work??
 function Set-DirectoryLocalName {
     param(
         [Parameter(Mandatory = $true)]
