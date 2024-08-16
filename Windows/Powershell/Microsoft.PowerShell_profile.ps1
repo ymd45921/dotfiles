@@ -15,6 +15,11 @@ $LocalCustomModulesDir = Join-Path $CustomModulesDir $env:COMPUTERNAME
 $OneDriveExecutable = "$env:ProgramFiles\Microsoft OneDrive\OneDrive.exe"
 $MsEdgeExecutable = "${env:ProgramFiles(x86)}\Microsoft\Edge\Application\msedge.exe"
 
+# refreshenv provided by chocolatey
+if (Test-Path $env:ChocolateyInstall) {
+    Import-Module $env:ChocolateyInstall\helpers\chocolateyProfile.psm1
+}
+
 ### Utilities to load customized user scripts and modules
 function Invoke-CustomModules {
     param([string]$Path,[switch]$Verbose);
@@ -110,7 +115,6 @@ function Get-CommandPath {
         return $Command.Source
     }
     return $Name # Type is 'Function' or 'Cmdlet'
-
 }
 # ! Tooooooo slow
 function Find-ProgramPath { # todo: uncompleted logic
@@ -418,11 +422,15 @@ function Read-IniFile {
 function Format-IniFile {
     param (
         [Parameter(Mandatory = $true)]
-        [hashtable]$Data
+        [hashtable]$Data,
+        [switch]$SkipEmpty = $false
     )
 
     $content = ""
     foreach ($section in $Data.Keys) {
+        if ($SkipEmpty -and ($Data[$section].Count -eq 0)) {
+            continue
+        }
         $content += "[$section]`r`n"
         foreach ($key in $Data[$section].Keys) {
             $content += "$key=$($Data[$section][$key])`r`n"
@@ -439,6 +447,7 @@ function Write-IniFile {
         [hashtable]$Data,
         [switch]$Force = $false,
         [switch]$Append = $false,
+        [switch]$SkipEmpty = $false,
         [ValidateSet(
             "Ascii", "BigEndianUnicode", "Byte", "Default", 
             "OEM", "Unicode", "UTF7", "UTF8", "UTF8BOM", 
@@ -447,7 +456,7 @@ function Write-IniFile {
         [string]$Encoding = "OEM"
     )
 
-    $content = Format-IniFile -Data $Data
+    $content = Format-IniFile -Data $Data -SkipEmpty:$SkipEmpty
     if ($Append) {
         Add-Content -Path $Path -Value $content -Encoding $Encoding
     } else {
@@ -463,10 +472,11 @@ function Write-IniFileByANSI {
         [string]$Path,
         [Parameter(Mandatory = $true)]
         [hashtable]$Data,
-        [switch]$Force = $false
+        [switch]$Force = $false,
+        [switch]$SkipEmpty = $false
     )
 
-    $content = Format-IniFile -Data $Data
+    $content = Format-IniFile -Data $Data -SkipEmpty:$SkipEmpty
     if ((Test-Path $Path) -and (-not $Force)) {
         throw "File already exists: $Path"
     }
@@ -474,7 +484,47 @@ function Write-IniFileByANSI {
     Set-Content -Path $Path -Value $content -Encoding OEM
 }
 
-# Set Localized Name for a folder
+# Set Localized Name for a folder/file without refresh immediately
+# * wait for a while to see the effect
+function Get-DesktopIniObject {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [switch]$Ensure = $false
+    )
+    if (-not (Test-Path $Path)) {
+        throw "Path not found."
+    } else {
+        $Path = (Get-Item -Path $Path).FullName
+        if (-not (Test-Path $Path -PathType Container)) {
+            $Path = [System.IO.Path]::GetDirectoryName($Path)
+        }
+    }
+    $desktopIniPath = Join-Path $Path 'desktop.ini'
+    $desktopIniObject = @{}
+    if (-not (Test-Path $desktopIniPath)) {
+        New-Item -Path $desktopIniPath -ItemType File | Out-Null
+    } else {
+        $desktopIniObject = Read-IniFile -Path $desktopIniPath
+    }
+    if ($Ensure) {
+        if (-not $desktopIniObject.ContainsKey('.ShellClassInfo')) { $desktopIniObject['.ShellClassInfo'] = @{} }
+        if (-not $desktopIniObject.ContainsKey('ViewState')) { $desktopIniObject['ViewState'] = @{} }
+        if (-not $desktopIniObject.ContainsKey('LocalizedFileNames')) { $desktopIniObject['LocalizedFileNames'] = @{} }
+    }
+    return $desktopIniObject
+}
+function Open-DesktopIniByNotepad {
+    param([string]$Path)
+    if (-not $Path) { $Path = $PWD }
+    $desktopIniPath = Join-Path $Path 'desktop.ini'
+    if (Test-Path $desktopIniPath) {
+        notepad $desktopIniPath
+    } else {
+        throw "desktop.ini not found."
+    }
+}
+Set-Alias desktopini Open-DesktopIniByNotepad
 function Set-LocalizedFolderName {
     param(
         [Parameter(Mandatory = $true)]
@@ -485,24 +535,34 @@ function Set-LocalizedFolderName {
     if (-not (Test-Path $Path -PathType Container)) {
         throw "Path is not a directory."
     }
-    $desktopIni = Join-Path $Path 'desktop.ini'
-    $desktopIniObject = @{}
-    if (-not (Test-Path $desktopIni)) {
-        New-Item -Path $desktopIni -ItemType File | Out-Null
-    } else {
-        $desktopIniObject = Read-IniFile -Path $desktopIni
-    }
-    if (-not $desktopIniObject.ContainsKey('.ShellClassInfo')) {
-        $desktopIniObject['.ShellClassInfo'] = @{}
-    }
+    $desktopIniPath = Join-Path $Path 'desktop.ini'
+    $desktopIniObject = Get-DesktopIniObject -Path $Path -Ensure
     $desktopIniObject['.ShellClassInfo']['LocalizedResourceName'] = $Name
-    Write-IniFileByANSI -Path $desktopIni -Data $desktopIniObject -Force
-    $desktopIniAttrib = (Get-ItemProperty -Path $desktopIni -Name Attributes).Attributes
+    Write-IniFileByANSI -Path $desktopIniPath -Data $desktopIniObject -Force -SkipEmpty
+    $desktopIniAttrib = (Get-ItemProperty -Path $desktopIniPath -Name Attributes).Attributes
     # ([System.IO.FileAttributes]::System + [System.IO.FileAttributes]::Hidden) = 6
-    Set-ItemProperty -Path $desktopIni -Name Attributes -Value ($desktopIniAttrib -bor 6)
+    Set-ItemProperty -Path $desktopIniPath -Name Attributes -Value ($desktopIniAttrib -bor 6)
 }
-# ! not work??
-function Set-DirectoryLocalName {
+function Set-LocalizedFileName {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+    if (-not (Test-Path $Path -PathType Leaf)) {
+        throw "Path is not a file."
+    }
+    $dirname = [System.IO.Path]::GetDirectoryName($Path)
+    $filename = [System.IO.Path]::GetFileName($Path)
+    $desktopIniPath = Join-Path $dirname 'desktop.ini'
+    $desktopIniObject = Get-DesktopIniObject -Path $Path -Ensure
+    $desktopIniObject['LocalizedFileNames'][$filename] = $Name
+    Write-IniFileByANSI -Path $desktopIniPath -Data $desktopIniObject -Force -SkipEmpty
+    $desktopIniAttrib = (Get-ItemProperty -Path $desktopIniPath -Name Attributes).Attributes
+    Set-ItemProperty -Path $desktopIniPath -Name Attributes -Value ($desktopIniAttrib -bor 6)
+}
+function Set-LocalizedName {
     param(
         [Parameter(Mandatory = $true)]
         [string]$Path,
@@ -512,9 +572,17 @@ function Set-DirectoryLocalName {
         $Name = $Path
         $Path = $PWD
     }
-    Set-LocalizedFolderName -Path $Path -Name $Name
+    if (-not (Test-Path $Path)) {
+        throw "Path not found."
+    } elseif (Test-Path $Path -PathType Container) {
+        Set-LocalizedFolderName -Path $Path -Name $Name
+    } elseif (Test-Path $Path -PathType Leaf) {
+        Set-LocalizedFileName -Path $Path -Name $Name
+    } else {
+        throw "Path is not a valid directory or file."
+    }
 }
-Set-Alias setname Set-DirectoryLocalName
+Set-Alias setname Set-LocalizedName
 
 #f45873b3-b655-43a6-b217-97c00aa0db58 PowerToys CommandNotFound module
 
