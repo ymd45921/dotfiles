@@ -395,7 +395,13 @@ function Initialize-VSCodium {
 function Read-IniFile {
     param (
         [Parameter(Mandatory = $true)]
-        [string]$Path
+        [string]$Path,
+        [ValidateSet(
+            "Ascii", "BigEndianUnicode", "Byte", "Default", 
+            "OEM", "Unicode", "UTF7", "UTF8", "UTF8BOM", 
+            "UTF8NoBOM", "UTF32", IgnoreCase = $true
+        )]
+        [string]$Encoding = "Default"
     )
 
     if (-not (Test-Path $Path)) {
@@ -405,7 +411,7 @@ function Read-IniFile {
     $ini = @{}
     $section = ""
 
-    foreach ($line in Get-Content -Path $Path) {
+    foreach ($line in Get-Content -Path $Path -Encoding $Encoding) {
         $line = $line.Trim()
         if ($line -match '^\[(.+)\]$') {
             $section = $matches[1]
@@ -483,6 +489,13 @@ function Write-IniFileByANSI {
     # * It's seems OEM option will encode the content to ANSI.
     Set-Content -Path $Path -Value $content -Encoding OEM
 }
+function Read-IniFileByANSI {
+    param (
+        [Parameter(Mandatory = $true)]
+        [string]$Path
+    )
+    return Read-IniFile -Path $Path -Encoding OEM
+}
 
 # Set Localized Name for a folder/file without refresh immediately
 # * wait for a while to see the effect
@@ -505,7 +518,7 @@ function Get-DesktopIniObject {
     if (-not (Test-Path $desktopIniPath)) {
         New-Item -Path $desktopIniPath -ItemType File | Out-Null
     } else {
-        $desktopIniObject = Read-IniFile -Path $desktopIniPath
+        $desktopIniObject = Read-IniFileByANSI -Path $desktopIniPath
     }
     if ($Ensure) {
         if (-not $desktopIniObject.ContainsKey('.ShellClassInfo')) { $desktopIniObject['.ShellClassInfo'] = @{} }

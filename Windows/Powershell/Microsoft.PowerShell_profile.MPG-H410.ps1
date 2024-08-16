@@ -187,3 +187,43 @@ function Lock-Screen {
     }
 }
 Set-Alias monitoroff Lock-Screen
+
+# Set folder icon by color
+# * Requires INI/desktop.ini functions in Microsoft.PowerShell_profile.ps1
+function Set-FolderColor {
+    param(
+        [string]$Path = $PWD,
+        [ValidateSet('None', 'Red', 'Orange', 'Green', 'Cyan', 'Blue', 'Purple', 'Pink', 'Gray', IgnoreCase = $true)]
+        [string]$Color = 'None',
+        [switch]$Light = $false
+    )
+    if (-not (Test-Path $Path -PathType Container)) {
+        throw "Directory '$Path' not found."
+    }
+    $desktopIniPath = Join-Path $Path 'desktop.ini'
+    $ColorMap = @{
+        'None' = 0
+        'Red' = 1
+        'Orange' = 2
+        'Green' = 3
+        'Cyan' = 4
+        'Blue' = 5
+        'Purple' = 6
+        'Pink' = 7
+        'Gray' = 8
+    }
+    $ColorIndex = $ColorMap[$Color]
+    if ($Color -eq 'Gray') { $Light = -not $Light }
+    if ($Light) {
+        $ColorIndex += 8
+        if ($Color -eq 'None') { $ColorIndex += 9 }
+    }
+    # * Temporarily hard-coded path for myself
+    $IconLibrary = "$OneDriveRoot\图片\图标\库\svg\Onedrive New Colored Folders\WindowsColoredFolders.icl"
+    $desktopIniObject = Get-DesktopIniObject -Path $Path -Ensure
+    $desktopIniObject['.ShellClassInfo'].IconResource = "$IconLibrary,$ColorIndex"
+    Write-IniFileByANSI -Path $desktopIniPath -Data $desktopIniObject -Force -SkipEmpty
+    $desktopIniAttrib = (Get-ItemProperty -Path $desktopIniPath -Name Attributes).Attributes
+    Set-ItemProperty -Path $desktopIniPath -Name Attributes -Value ($desktopIniAttrib -bor 6)
+}
+Set-Alias setcolor Set-FolderColor
