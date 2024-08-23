@@ -227,3 +227,16 @@ function Set-FolderColor {
     Set-ItemProperty -Path $desktopIniPath -Name Attributes -Value ($desktopIniAttrib -bor 6)
 }
 Set-Alias setcolor Set-FolderColor
+
+# Open Unity Hub by proxy
+# ! Powershell version not-work.
+function Open-UnityHub {
+    return & "C:\Apps\Env\UnityHubByProxy.bat"
+    $UnityHubPath = 'C:\Program Files\Unity Hub\Unity Hub.exe'
+    Start-Job -Name UnityHubByProxy -ScriptBlock {
+        $env:HTTP_PROXY = $HttpProxy
+        $env:HTTPS_PROXY = $HttpProxy
+        & $using:UnityHubPath 
+    }
+}
+Set-Alias unityhub Open-UnityHub

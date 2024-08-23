@@ -597,6 +597,25 @@ function Set-LocalizedName {
 }
 Set-Alias setname Set-LocalizedName
 
+# Hide all dotfiles in a directory
+# note: Make it a bootstap script but not a cmdlet?
+function Hide-DotFiles {
+    param(
+        [string]$Path = $PWD,
+        [switch]$File = $false,
+        [switch]$Directory  = $false,
+        [switch]$Folder = $false
+    );
+    $DotFiles = Get-ChildItem -Path $Path -Filter '.*' -File:$File -Directory:($Folder -or $Directory) -Force
+    foreach ($DotFile in $DotFiles) {
+        $attr = (Get-ItemProperty -Path $DotFile.FullName -Name Attributes).Attributes
+        $DotFile.Attributes = $attr -bor 2 # 2: Hidden
+    }
+}
+function Hide-DotFilesInHome {
+    Hide-DotFiles -Path $UserProfile
+}
+
 #f45873b3-b655-43a6-b217-97c00aa0db58 PowerToys CommandNotFound module
 
 Import-Module -Name Microsoft.WinGet.CommandNotFound
