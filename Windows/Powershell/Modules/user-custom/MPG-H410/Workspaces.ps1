@@ -33,7 +33,37 @@ Set-Alias downloads OpenDownloadsDir
 
 ### Others
 function Start-HearthStone {
-    &"D:\Program Files\LeiGod_Acc\leigod.exe";
-    &"D:\Personal\Apps\HDT炉石团子版\HearthstoneDeckTracker.exe";
+    &"C:\Program Files (x86)\LeiGod_Acc\leigod.exe";
+    &"C:\Apps\HDT\HearthstoneDeckTracker.exe";
 }
 Set-Alias 炉石传说，启动！ Start-HearthStone
+
+### Try to load MiaoMiaoTools python tools
+# todo: temporary solution, need enhancement.
+$MiaoMiaoToolsDIR = 'A:\PycharmProjects\MiaoMiaoTools'
+function Load-MiaoMiaoTools {
+    if (Test-Path $MiaoMiaoToolsDIR) {
+        Set-Location $MiaoMiaoToolsDIR
+        & "$MiaoMiaoToolsDIR\.venv\Scripts\activate.ps1"
+        # ! activate .venv cause oh-my-posh theme looks weird
+    }
+}
+# ! When pass '-o', it is ambiguous and cannot be avoided.
+function Invoke-MiaoMiaoTools {
+    param(
+        [Parameter(Mandatory=$true)]
+        [string]$Name,
+        [Parameter(ValueFromRemainingArguments = $true)]
+        [string[]]$Args
+    )
+    pwsh.exe -NoExit -Command {
+        param($Name, $ArgsToPass)
+        Load-MiaoMiaoTools
+        if (Test-Path $MiaoMiaoToolsDIR) {
+            Set-Location $MiaoMiaoToolsDIR
+            python -m $Name @ArgsToPass
+        }
+        exit
+    } -Args $Name, $Args
+}
+Set-Alias mmtools Invoke-MiaoMiaoTools
