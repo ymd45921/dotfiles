@@ -67,3 +67,6 @@ function Invoke-MiaoMiaoTools {
     } -Args $Name, $Args
 }
 Set-Alias mmtools Invoke-MiaoMiaoTools
+function Get-TodaySpotlightWallpapers {
+    mmtools SpotlightDownloader --all --output "$env:USERPROFILE\OneDrive\图片\壁纸和主题\Windows 聚焦"
+}

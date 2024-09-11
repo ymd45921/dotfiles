@@ -240,3 +240,45 @@ function Open-UnityHub {
     }
 }
 Set-Alias unityhub Open-UnityHub
+
+# Enter developer shell for Visual Studio
+function Find-VisualStudio {
+    $VisualStudioCmd = Get-Command -Name devenv -ErrorAction SilentlyContinue
+    if ($null -eq $VisualStudioCmd) {
+        $paths = @(
+            "$env:ProgramFiles\Microsoft Visual Studio",
+            "${env:ProgramFiles(x86)}\Microsoft Visual Studio",
+            "$env:SystemDrive\Program Files\Microsoft\VisualStudio",
+            "$env:SystemDrive\Program Files (x86)\Microsoft\VisualStudio"
+        )
+        $versions = @('2022', '2019', '2017')
+        $editions = @('Enterprise', 'Professional', 'Community')
+        foreach ($version in $versions) {
+            foreach ($edition in $editions) {
+                foreach ($path in $paths) {
+                    $VisualStudioPath = Join-Path $path "$version\$edition\Common7\IDE\devenv.exe"
+                    if (Test-Path $VisualStudioPath) {
+                        return $VisualStudioPath
+                    }
+                }
+            }
+        }
+    }
+    $VisualStudioPath = $VisualStudioCmd.Source
+    return $VisualStudioPath
+}
+function Enter-VisualStudioShell {
+    $VisualStudioPath = Find-VisualStudio
+    $VisualStudioDir = [System.IO.Path]::GetDirectoryName($VisualStudioPath)
+    if ($null -eq $VisualStudioPath) {
+        throw "Visual Studio not found."
+    }
+    $DevShellDllPath = Join-Path (Split-Path $VisualStudioDir -Parent) 'Tools\Microsoft.VisualStudio.DevShell.dll'
+    if (-not (Test-Path $DevShellDllPath)) {
+        throw "Visual Studio Developer Command Prompt not found."
+    }
+    Import-Module $DevShellDllPath
+    Enter-VsDevShell b7bd52ef
+}
+Set-Alias vsdev Enter-VisualStudioShell
+Set-Alias DevShell Enter-VisualStudioShell
