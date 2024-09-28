@@ -9,5 +9,8 @@
     "editor.unicodeHighlight.nonBasicASCII": false,
     "git.confirmSync": false,
     "workbench.colorTheme": "GitHub Dark Default",
-    "github.copilot.editor.enableAutoCompletions": true
+    "github.copilot.editor.enableAutoCompletions": true,
+    "files.associations": {
+        "*.gltf": "json"
+    }
 }
