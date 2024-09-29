@@ -165,6 +165,8 @@ make_all_scripts_executable() {
     fi
   done
 }
+alias chomd="make_all_scripts_executable $custom_scripts_dir"
+alias chomd-local="make_all_scripts_executable $OMD_DIR/MacOS/zsh/.oh-my-zsh/custom/scripts"
 
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh

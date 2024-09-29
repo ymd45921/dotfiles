@@ -54,15 +54,7 @@ try_enable_python_venv() {
 
 alias venv="try_enable_python_venv"
 
-zsh_print_color256_palette() {
-    for code in {000..255}; do 
-        print -nP -- "%F{$code}$code %f"; 
-        [ $((${code} % 16)) -eq 15 ] && echo; 
-    done
-}
-bash_print_color256_palette() {
-    for code in {0..255}; do 
-        echo -n "[38;05;${code}m $(printf %03d $code)"; 
-        [ $((${code} % 16)) -eq 15 ] && echo; 
-    done
-}
+# ref to @/scripts/color256.sh
+alias color256="color256.sh rainbow"
+# alias pastel-palettes="color256.sh pastel"
+alias "pastel*palettes"="color256.sh pastel"
