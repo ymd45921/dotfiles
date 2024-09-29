@@ -148,11 +148,28 @@ custom_modules_dir=~/.oh-my-zsh/custom/modules
 # source_all_sh_files_recursive "$custom_modules_dir"
 source_all_sh_files "$custom_modules_dir"
 
+# Add custom scripts to path
+# Directory: ~/.oh-my-zsh/custom/scripts
+custom_scripts_dir=~/.oh-my-zsh/custom/scripts
+if [ -d "$custom_scripts_dir" ]; then
+  export PATH="$custom_scripts_dir:$PATH"
+fi
+make_all_scripts_executable() {
+  local dir="$1"
+  if [ ! -d "$dir" ]; then
+    return 1
+  fi
+  for file in "$dir"/*.sh; do
+    if [ -f "$file" ]; then
+      chmod +x "$file"
+    fi
+  done
+}
+
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
-
 
 # pnpm
 export PNPM_HOME="/Users/nnm/Library/pnpm"
@@ -161,5 +178,4 @@ case ":$PATH:" in
   *) export PATH="$PNPM_HOME:$PATH" ;;
 esac
 # pnpm endexport PATH="$HOME/.jenv/bin:$PATH"
-eval "$(jenv init -)"
 eval "$(jenv init -)"

@@ -73,6 +73,10 @@ function _p9k_init_icons() {
         LINUX_RHEL_ICON                '\uE271'$s             # 
         LINUX_AMZN_ICON                '\uE271'$s             # 
         LINUX_ENDEAVOUROS_ICON         '\uE271'$s             # 
+        LINUX_ROCKY_ICON               '\uE271'$s             # 
+        LINUX_ALMALINUX_ICON           '\uE271'$s             # 
+        LINUX_GUIX_ICON                '\uE271'$s             # 
+        LINUX_NEON_ICON                '\uE271'$s             # 
         SUNOS_ICON                     '\U1F31E'$q            # 🌞
         HOME_ICON                      '\uE12C'$s             # 
         HOME_SUB_ICON                  '\uE18D'$s             # 
@@ -103,6 +107,18 @@ function _p9k_init_icons() {
         VCS_GIT_GITHUB_ICON            '\uE20E '              #
         VCS_GIT_BITBUCKET_ICON         '\uE20E '              #
         VCS_GIT_GITLAB_ICON            '\uE20E '              #
+        VCS_GIT_AZURE_ICON             '\uE20E '              #
+        VCS_GIT_ARCHLINUX_ICON         '\uE20E '              #
+        VCS_GIT_CODEBERG_ICON          '\uE20E '              #
+        VCS_GIT_DEBIAN_ICON            '\uE20E '              #
+        VCS_GIT_FREEBSD_ICON           '\uE20E '              #
+        VCS_GIT_FREEDESKTOP_ICON       '\uE20E '              #
+        VCS_GIT_GNOME_ICON             '\uE20E '              #
+        VCS_GIT_GNU_ICON               '\uE20E '              #
+        VCS_GIT_KDE_ICON               '\uE20E '              #
+        VCS_GIT_LINUX_ICON             '\uE20E '              #
+        VCS_GIT_GITEA_ICON             '\uE20E '              #
+        VCS_GIT_SOURCEHUT_ICON         '\uE20E '              #
         VCS_HG_ICON                    '\uE1C3 '              # 
         VCS_SVN_ICON                   'svn'$q
         RUST_ICON                      'R'
@@ -124,6 +140,7 @@ function _p9k_init_icons() {
         JAVA_ICON                      '\U2615'               # ☕︎
         LARAVEL_ICON                   ''
         RANGER_ICON                    '\u2B50'               # ⭐
+        YAZI_ICON                      '\u2B50'               # ⭐
         MIDNIGHT_COMMANDER_ICON        'mc'
         VIM_ICON                       'vim'
         TERRAFORM_ICON                 'tf'
@@ -153,6 +170,7 @@ function _p9k_init_icons() {
         SCALA_ICON                     'scala'
         TOOLBOX_ICON                   '\u2B22'               # ⬢
         ARCH_ICON                      'arch'
+        HISTORY_ICON                   'hist'
       )
     ;;
     'awesome-fontconfig')
@@ -214,6 +232,10 @@ function _p9k_init_icons() {
         LINUX_RHEL_ICON                '\uF17C'$s             # 
         LINUX_AMZN_ICON                '\uF17C'$s             # 
         LINUX_ENDEAVOUROS_ICON         '\uF17C'$s             # 
+        LINUX_ROCKY_ICON               '\uF17C'$s             # 
+        LINUX_ALMALINUX_ICON           '\uF17C'$s             # 
+        LINUX_GUIX_ICON                '\uF17C'$s             # 
+        LINUX_NEON_ICON                '\uF17C'$s             # 
         SUNOS_ICON                     '\uF185 '              # 
         HOME_ICON                      '\uF015'$s             # 
         HOME_SUB_ICON                  '\uF07C'$s             # 
@@ -240,6 +262,18 @@ function _p9k_init_icons() {
         VCS_GIT_GITHUB_ICON            '\uF113 '              # 
         VCS_GIT_BITBUCKET_ICON         '\uF171 '              # 
         VCS_GIT_GITLAB_ICON            '\uF296 '              # 
+        VCS_GIT_AZURE_ICON             '\u2601 '              # ☁
+        VCS_GIT_ARCHLINUX_ICON         '\uF1D3 '              # 
+        VCS_GIT_CODEBERG_ICON          '\uF1D3 '              # 
+        VCS_GIT_DEBIAN_ICON            '\uF1D3 '              # 
+        VCS_GIT_FREEBSD_ICON           '\uF1D3 '              # 
+        VCS_GIT_FREEDESKTOP_ICON       '\uF1D3 '              # 
+        VCS_GIT_GNOME_ICON             '\uF1D3 '              # 
+        VCS_GIT_GNU_ICON               '\uF1D3 '              # 
+        VCS_GIT_KDE_ICON               '\uF1D3 '              # 
+        VCS_GIT_LINUX_ICON             '\uF1D3 '              # 
+        VCS_GIT_GITEA_ICON             '\uF1D3 '              # 
+        VCS_GIT_SOURCEHUT_ICON         '\uF1D3 '              # 
         VCS_HG_ICON                    '\uF0C3 '              # 
         VCS_SVN_ICON                   'svn'$q
         RUST_ICON                      '\uE6A8'               # 
@@ -261,6 +295,7 @@ function _p9k_init_icons() {
         JAVA_ICON                      '\U2615'               # ☕︎
         LARAVEL_ICON                   ''
         RANGER_ICON                    '\u2B50'               # ⭐
+        YAZI_ICON                      '\u2B50'               # ⭐
         MIDNIGHT_COMMANDER_ICON        'mc'
         VIM_ICON                       'vim'
         TERRAFORM_ICON                 'tf'
@@ -290,6 +325,7 @@ function _p9k_init_icons() {
         SCALA_ICON                     'scala'
         TOOLBOX_ICON                   '\u2B22'               # ⬢
         ARCH_ICON                      'arch'
+        HISTORY_ICON                   'hist'
       )
     ;;
     'awesome-mapped-fontconfig')
@@ -356,6 +392,10 @@ function _p9k_init_icons() {
         LINUX_RHEL_ICON                "${CODEPOINT_OF_AWESOME_LINUX:+\\u$CODEPOINT_OF_AWESOME_LINUX$s}"
         LINUX_AMZN_ICON                "${CODEPOINT_OF_AWESOME_LINUX:+\\u$CODEPOINT_OF_AWESOME_LINUX$s}"
         LINUX_ENDEAVOUROS_ICON         "${CODEPOINT_OF_AWESOME_LINUX:+\\u$CODEPOINT_OF_AWESOME_LINUX$s}"
+        LINUX_ROCKY_ICON               "${CODEPOINT_OF_AWESOME_LINUX:+\\u$CODEPOINT_OF_AWESOME_LINUX$s}"
+        LINUX_ALMALINUX_ICON           "${CODEPOINT_OF_AWESOME_LINUX:+\\u$CODEPOINT_OF_AWESOME_LINUX$s}"
+        LINUX_GUIX_ICON                "${CODEPOINT_OF_AWESOME_LINUX:+\\u$CODEPOINT_OF_AWESOME_LINUX$s}"
+        LINUX_NEON_ICON                "${CODEPOINT_OF_AWESOME_LINUX:+\\u$CODEPOINT_OF_AWESOME_LINUX$s}"
         SUNOS_ICON                     "${CODEPOINT_OF_AWESOME_SUN_O:+\\u$CODEPOINT_OF_AWESOME_SUN_O }"
         HOME_ICON                      "${CODEPOINT_OF_AWESOME_HOME:+\\u$CODEPOINT_OF_AWESOME_HOME$s}"
         HOME_SUB_ICON                  "${CODEPOINT_OF_AWESOME_FOLDER_OPEN:+\\u$CODEPOINT_OF_AWESOME_FOLDER_OPEN$s}"
@@ -382,6 +422,18 @@ function _p9k_init_icons() {
         VCS_GIT_GITHUB_ICON            "${CODEPOINT_OF_AWESOME_GITHUB_ALT:+\\u$CODEPOINT_OF_AWESOME_GITHUB_ALT }"
         VCS_GIT_BITBUCKET_ICON         "${CODEPOINT_OF_AWESOME_BITBUCKET:+\\u$CODEPOINT_OF_AWESOME_BITBUCKET }"
         VCS_GIT_GITLAB_ICON            "${CODEPOINT_OF_AWESOME_GITLAB:+\\u$CODEPOINT_OF_AWESOME_GITLAB }"
+        VCS_GIT_AZURE_ICON             '\u2601 '                                      # ☁
+        VCS_GIT_ARCHLINUX_ICON         "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_CODEBERG_ICON          "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_DEBIAN_ICON            "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_FREEBSD_ICON           "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_FREEDESKTOP_ICON       "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_GNOME_ICON             "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_GNU_ICON               "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_KDE_ICON               "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_LINUX_ICON             "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_GITEA_ICON             "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
+        VCS_GIT_SOURCEHUT_ICON         "${CODEPOINT_OF_AWESOME_GIT:+\\u$CODEPOINT_OF_AWESOME_GIT }"
         VCS_HG_ICON                    "${CODEPOINT_OF_AWESOME_FLASK:+\\u$CODEPOINT_OF_AWESOME_FLASK }"
         VCS_SVN_ICON                   'svn'$q
         RUST_ICON                      '\uE6A8'                                       # 
@@ -401,6 +453,7 @@ function _p9k_init_icons() {
         JAVA_ICON                      '\U2615'                                       # ☕︎
         LARAVEL_ICON                   ''
         RANGER_ICON                    '\u2B50'                                       # ⭐
+        YAZI_ICON                      '\u2B50'                                       # ⭐
         MIDNIGHT_COMMANDER_ICON        'mc'
         VIM_ICON                       'vim'
         TERRAFORM_ICON                 'tf'
@@ -430,6 +483,7 @@ function _p9k_init_icons() {
         SCALA_ICON                     'scala'
         TOOLBOX_ICON                   '\u2B22'                                       # ⬢
         ARCH_ICON                      'arch'
+        HISTORY_ICON                   'hist'
       )
     ;;
     'nerdfont-v3')
@@ -488,9 +542,13 @@ function _p9k_init_icons() {
         LINUX_ARTIX_ICON               '\UF31F'$s             # 
         LINUX_UBUNTU_ICON              '\uF31b'$s             # 
         LINUX_KALI_ICON                '\uF327'$s             # 
-        LINUX_RHEL_ICON                '\uF316'$s             # 
+        LINUX_RHEL_ICON                '\UF111B'$s            # 󱄛
         LINUX_AMZN_ICON                '\uF270'$s             # 
         LINUX_ENDEAVOUROS_ICON         '\UF322'$s             # 
+        LINUX_ROCKY_ICON               '\UF32B'$s             # 
+        LINUX_ALMALINUX_ICON           '\UF31D'$s             # 
+        LINUX_GUIX_ICON                '\UF325'$s             # 
+        LINUX_NEON_ICON                '\uF17C'               # 
         LINUX_ICON                     '\uF17C'               # 
         SUNOS_ICON                     '\uF185 '              # 
         HOME_ICON                      '\uF015'$s             # 
@@ -518,6 +576,23 @@ function _p9k_init_icons() {
         VCS_GIT_GITHUB_ICON            '\uF113 '              # 
         VCS_GIT_BITBUCKET_ICON         '\uE703 '              # 
         VCS_GIT_GITLAB_ICON            '\uF296 '              # 
+        VCS_GIT_AZURE_ICON             '\uEBE8 '              # 
+        VCS_GIT_ARCHLINUX_ICON         '\uF303 '              # 
+        # v3.1 has \uF330.
+        VCS_GIT_CODEBERG_ICON          '\uF1D3 '              # 
+        VCS_GIT_DEBIAN_ICON            '\uF306 '              # 
+        VCS_GIT_FREEBSD_ICON           '\UF30C '              # 
+        # v3.1 has \uF360.
+        VCS_GIT_FREEDESKTOP_ICON       '\uF296 '              # 
+        # v3.1 has \uF361.
+        VCS_GIT_GNOME_ICON             '\uF296 '              # 
+        VCS_GIT_GNU_ICON               '\uE779 '              # 
+        # v3.1 has \uF332.
+        VCS_GIT_KDE_ICON               '\uF296 '              # 
+        VCS_GIT_LINUX_ICON             '\uF17C '              # 
+        # v3.1 has \uF339.
+        VCS_GIT_GITEA_ICON             '\uF1D3 '              # 
+        VCS_GIT_SOURCEHUT_ICON         '\uF1DB '              # 
         VCS_HG_ICON                    '\uF0C3 '              # 
         VCS_SVN_ICON                   '\uE72D'$q             # 
         RUST_ICON                      '\uE7A8'$q             # 
@@ -539,13 +614,14 @@ function _p9k_init_icons() {
         JAVA_ICON                      '\uE738'               # 
         LARAVEL_ICON                   '\ue73f'$q             # 
         RANGER_ICON                    '\uF00b '              # 
+        YAZI_ICON                      '\uF00b '              # 
         MIDNIGHT_COMMANDER_ICON        'mc'                   # mc
         VIM_ICON                       '\uE62B'               # 
         TERRAFORM_ICON                 '\uF1BB '              # 
         PROXY_ICON                     '\u2194'               # ↔
         DOTNET_ICON                    '\uE77F'               # 
         DOTNET_CORE_ICON               '\uE77F'               # 
-        AZURE_ICON                     '\UF0805'              # 󰠅
+        AZURE_ICON                     '\uEBD8 '              # 
         DIRENV_ICON                    '\u25BC'               # ▼
         FLUTTER_ICON                   'F'                    # F
         GCLOUD_ICON                    '\UF02AD'              # 󰊭
@@ -568,6 +644,7 @@ function _p9k_init_icons() {
         SCALA_ICON                     '\uE737'               # 
         TOOLBOX_ICON                   '\uE20F'$s             # 
         ARCH_ICON                      '\uE266'               # 
+        HISTORY_ICON                   '\uF1DA'$s             # 
       )
     ;;
     'nerdfont-complete'|'nerdfont-fontconfig')
@@ -629,6 +706,10 @@ function _p9k_init_icons() {
         LINUX_RHEL_ICON                '\uF316'$s             # 
         LINUX_AMZN_ICON                '\uF270'$s             # 
         LINUX_ENDEAVOUROS_ICON         '\uF17C'               # 
+        LINUX_ROCKY_ICON               '\uF17C'               # 
+        LINUX_ALMALINUX_ICON           '\uF17C'               # 
+        LINUX_GUIX_ICON                '\uF325'$s             # 
+        LINUX_NEON_ICON                '\uF17C'               # 
         LINUX_ICON                     '\uF17C'               # 
         SUNOS_ICON                     '\uF185 '              # 
         HOME_ICON                      '\uF015'$s             # 
@@ -656,6 +737,18 @@ function _p9k_init_icons() {
         VCS_GIT_GITHUB_ICON            '\uF113 '              # 
         VCS_GIT_BITBUCKET_ICON         '\uE703 '              # 
         VCS_GIT_GITLAB_ICON            '\uF296 '              # 
+        VCS_GIT_AZURE_ICON             '\uFD03 '              # ﴃ
+        VCS_GIT_ARCHLINUX_ICON         '\uF303 '              # 
+        VCS_GIT_CODEBERG_ICON          '\uF1D3 '              # 
+        VCS_GIT_DEBIAN_ICON            '\uF306 '              # 
+        VCS_GIT_FREEBSD_ICON           '\UF30C '              # 
+        VCS_GIT_FREEDESKTOP_ICON       '\uF296 '              # 
+        VCS_GIT_GNOME_ICON             '\uF296 '              # 
+        VCS_GIT_GNU_ICON               '\uE779 '              # 
+        VCS_GIT_KDE_ICON               '\uF296 '              # 
+        VCS_GIT_LINUX_ICON             '\uF17C '              # 
+        VCS_GIT_GITEA_ICON             '\uF1D3 '              # 
+        VCS_GIT_SOURCEHUT_ICON         '\uF1DB '              # 
         VCS_HG_ICON                    '\uF0C3 '              # 
         VCS_SVN_ICON                   '\uE72D'$q             # 
         RUST_ICON                      '\uE7A8'$q             # 
@@ -677,6 +770,7 @@ function _p9k_init_icons() {
         JAVA_ICON                      '\uE738'               # 
         LARAVEL_ICON                   '\ue73f'$q             # 
         RANGER_ICON                    '\uF00b '              # 
+        YAZI_ICON                      '\uF00b '              # 
         MIDNIGHT_COMMANDER_ICON        'mc'
         VIM_ICON                       '\uE62B'               # 
         TERRAFORM_ICON                 '\uF1BB '              # 
@@ -706,6 +800,7 @@ function _p9k_init_icons() {
         SCALA_ICON                     '\uE737'               # 
         TOOLBOX_ICON                   '\uE20F'$s             # 
         ARCH_ICON                      '\uE266'               # 
+        HISTORY_ICON                   '\uF1DA'$s             # 
       )
     ;;
     ascii)
@@ -765,6 +860,10 @@ function _p9k_init_icons() {
         LINUX_RHEL_ICON                'rhel'
         LINUX_AMZN_ICON                'amzn'
         LINUX_ENDEAVOUROS_ICON         'edvos'
+        LINUX_ROCKY_ICON               'rocky'
+        LINUX_ALMALINUX_ICON           'alma'
+        LINUX_GUIX_ICON                'guix'
+        LINUX_NEON_ICON                'neon'
         SUNOS_ICON                     'sunos'
         HOME_ICON                      ''
         HOME_SUB_ICON                  ''
@@ -791,6 +890,18 @@ function _p9k_init_icons() {
         VCS_GIT_GITHUB_ICON            ''
         VCS_GIT_BITBUCKET_ICON         ''
         VCS_GIT_GITLAB_ICON            ''
+        VCS_GIT_AZURE_ICON             ''
+        VCS_GIT_ARCHLINUX_ICON         ''
+        VCS_GIT_CODEBERG_ICON          ''
+        VCS_GIT_DEBIAN_ICON            ''
+        VCS_GIT_FREEBSD_ICON           ''
+        VCS_GIT_FREEDESKTOP_ICON       ''
+        VCS_GIT_GNOME_ICON             ''
+        VCS_GIT_GNU_ICON               ''
+        VCS_GIT_KDE_ICON               ''
+        VCS_GIT_LINUX_ICON             ''
+        VCS_GIT_GITEA_ICON             ''
+        VCS_GIT_SOURCEHUT_ICON         ''
         VCS_HG_ICON                    ''
         VCS_SVN_ICON                   ''
         RUST_ICON                      'rust'
@@ -812,6 +923,7 @@ function _p9k_init_icons() {
         JAVA_ICON                      'java'
         LARAVEL_ICON                   ''
         RANGER_ICON                    'ranger'
+        YAZI_ICON                      'yazi'
         MIDNIGHT_COMMANDER_ICON        'mc'
         VIM_ICON                       'vim'
         TERRAFORM_ICON                 'tf'
@@ -841,6 +953,7 @@ function _p9k_init_icons() {
         SCALA_ICON                     'scala'
         TOOLBOX_ICON                   'toolbox'
         ARCH_ICON                      'arch'
+        HISTORY_ICON                   'hist'
       )
     ;;
     *)
@@ -902,6 +1015,10 @@ function _p9k_init_icons() {
         LINUX_RHEL_ICON                'RH'
         LINUX_AMZN_ICON                'Amzn'
         LINUX_ENDEAVOUROS_ICON         'Edv'
+        LINUX_ROCKY_ICON               'Roc'
+        LINUX_ALMALINUX_ICON           'Alma'
+        LINUX_GUIX_ICON                'Guix'
+        LINUX_NEON_ICON                'Neon'
         SUNOS_ICON                     'Sun'
         HOME_ICON                      ''
         HOME_SUB_ICON                  ''
@@ -928,6 +1045,18 @@ function _p9k_init_icons() {
         VCS_GIT_GITHUB_ICON            ''
         VCS_GIT_BITBUCKET_ICON         ''
         VCS_GIT_GITLAB_ICON            ''
+        VCS_GIT_AZURE_ICON             ''
+        VCS_GIT_ARCHLINUX_ICON         ''
+        VCS_GIT_CODEBERG_ICON          ''
+        VCS_GIT_DEBIAN_ICON            ''
+        VCS_GIT_FREEBSD_ICON           ''
+        VCS_GIT_FREEDESKTOP_ICON       ''
+        VCS_GIT_GNOME_ICON             ''
+        VCS_GIT_GNU_ICON               ''
+        VCS_GIT_KDE_ICON               ''
+        VCS_GIT_LINUX_ICON             ''
+        VCS_GIT_GITEA_ICON             ''
+        VCS_GIT_SOURCEHUT_ICON         ''
         VCS_HG_ICON                    ''
         VCS_SVN_ICON                   ''
         RUST_ICON                      'R'
@@ -949,6 +1078,7 @@ function _p9k_init_icons() {
         JAVA_ICON                      '\U2615'               # ☕︎
         LARAVEL_ICON                   ''
         RANGER_ICON                    '\u2B50'               # ⭐
+        YAZI_ICON                      '\u2B50'               # ⭐
         MIDNIGHT_COMMANDER_ICON        'mc'
         VIM_ICON                       'vim'
         TERRAFORM_ICON                 'tf'
@@ -978,6 +1108,7 @@ function _p9k_init_icons() {
         SCALA_ICON                     'scala'
         TOOLBOX_ICON                   '\u2B22'               # ⬢
         ARCH_ICON                      'arch'
+        HISTORY_ICON                   'hist'
       )
     ;;
   esac

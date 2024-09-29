@@ -41,3 +41,28 @@ function convert_video_to_gif() {
 }
 
 alias mp42gif="convert_video_to_gif"
+
+try_enable_python_venv() {
+    if [[ -e "venv" ]]; then
+        source venv/bin/activate
+    elif [[ -e ".venv" ]]; then 
+        source .venv/bin/activate
+    else 
+        echo "No Python virtual environment found."
+    fi
+}
+
+alias venv="try_enable_python_venv"
+
+zsh_print_color256_palette() {
+    for code in {000..255}; do 
+        print -nP -- "%F{$code}$code %f"; 
+        [ $((${code} % 16)) -eq 15 ] && echo; 
+    done
+}
+bash_print_color256_palette() {
+    for code in {0..255}; do 
+        echo -n "[38;05;${code}m $(printf %03d $code)"; 
+        [ $((${code} % 16)) -eq 15 ] && echo; 
+    done
+}
