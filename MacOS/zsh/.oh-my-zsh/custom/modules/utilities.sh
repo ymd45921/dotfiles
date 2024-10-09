@@ -58,3 +58,24 @@ alias venv="try_enable_python_venv"
 alias color256="color256.sh rainbow"
 # alias pastel-palettes="color256.sh pastel"
 alias "pastel*palettes"="color256.sh pastel"
+
+patch_vscodium() {
+    local cmd_path=$(realpath $(which codium))
+    local res_path=$(realpath $cmd_path/../..)
+    local app_path=$(realpath $res_path/../../..)
+    if [[ ! -f $res_path/product.json ]]; then
+        echo "No product.json found in $app_path."
+        return 1
+    fi
+    local service_url="https://marketplace.visualstudio.com/_apis/public/gallery"
+    local item_url="https://marketplace.visualstudio.com/items"
+    local service_key=".extensionsGallery.serviceUrl"
+    local item_key=".extensionsGallery.itemUrl"
+    # sudo cp -f $res_path/product.json $res_path/product.json.bak
+    local patched_json=$(jq "$service_key=\"$service_url\" | $item_key=\"$item_url\"" $res_path/product.json)
+    # sudo echo $patched_json > $res_path/product.json
+    # * because of SIP, we copy patched json to clipboard and open it in VSCode
+    echo $patched_json | sed 's/\\/\\\\/g' | pbcopy
+    echo "The patched product.json has been copied to the clipboard. Please patch it manually."
+    code $res_path/product.json
+}

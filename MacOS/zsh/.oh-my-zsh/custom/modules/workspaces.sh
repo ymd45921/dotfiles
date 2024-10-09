@@ -53,7 +53,9 @@ alias blog="code $BLOG_DIR"
 ### upyun backup settings and tools by upx
 UPYUN_BACKUP_DIR="$EXTERNAL_HOME_DIR/Pictures/UpYun-Backup.localized"
 UPYUN_UPLOAD_DIR=/blog/auto-upload
+UPYUN_HOST_BASEURL="https://img.shiraha.cn"
 UPYUN_LAST_UPLOADED=""
+UPYUN_LAST_FILE_URL=""
 upyun_file_exists() {
     if [[ -z $1 ]]; then
         echo "No file to check."
@@ -88,7 +90,10 @@ upload_to_upyun() {
         extrun upyun/upx put $1 $uploadto
         if [[ $? -eq 0 ]]; then
             UPYUN_LAST_UPLOADED=$uploadto
+            UPYUN_LAST_FILE_URL=$UPYUN_HOST_BASEURL$uploadto # todo: escape the url
             echo "The file $1 has been uploaded to $UPYUN_LAST_UPLOADED."
+            echo $UPYUN_LAST_FILE_URL | pbcopy
+            echo "The URL has been copied to the clipboard."
         fi
     fi
 }
