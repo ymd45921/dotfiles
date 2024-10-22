@@ -181,3 +181,10 @@ case ":$PATH:" in
 esac
 # pnpm endexport PATH="$HOME/.jenv/bin:$PATH"
 eval "$(jenv init -)"
+
+# bun completions
+[ -s "/Users/nnm/.bun/_bun" ] && source "/Users/nnm/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
