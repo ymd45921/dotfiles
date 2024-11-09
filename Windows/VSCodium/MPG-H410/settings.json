@@ -1,6 +1,6 @@
 {
-    "workbench.iconTheme": "vscode-icons",
-    "editor.fontFamily": "Rec Mono Linear, UbuntuMono Nerd Font Mono, Sarasa UI SC, Microsoft YaHei UI, PingFang SC, 宋体, Consolas, 'Courier New', monospace",
+    "workbench.iconTheme": "vscode-jetbrains-icon-theme-2023-light",
+    "editor.fontFamily": "Rec Mono Duotone, Rec Mono Linear, UbuntuMono Nerd Font Mono, Sarasa UI SC, Microsoft YaHei UI, PingFang SC, 宋体, Consolas, 'Courier New', monospace",
     "editor.fontSize": 18,
     "terminal.integrated.fontSize": 18,
     "terminal.integrated.fontFamily": "UbuntuMono Nerd Font Mono, 宋体, Consolas, 'Courier New', monospace",
@@ -8,9 +8,14 @@
     "security.workspace.trust.untrustedFiles": "open",
     "editor.unicodeHighlight.nonBasicASCII": false,
     "git.confirmSync": false,
-    "workbench.colorTheme": "GitHub Dark Default",
+    "workbench.colorTheme": "GitHub Light",
     "github.copilot.editor.enableAutoCompletions": true,
     "files.associations": {
         "*.gltf": "json"
-    }
+    },
+    "cmake.pinnedCommands": [
+        "workbench.action.tasks.configureTaskRunner",
+        "workbench.action.tasks.runTask"
+    ],
+    "code-runner.runInTerminal": true
 }

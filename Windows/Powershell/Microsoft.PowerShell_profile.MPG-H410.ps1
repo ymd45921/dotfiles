@@ -283,3 +283,10 @@ function Enter-VisualStudioShell {
 }
 Set-Alias vsdev Enter-VisualStudioShell
 Set-Alias DevShell Enter-VisualStudioShell
+
+# Waifu-2x-caffe
+$Waifu2xCaffePath = "C:\Apps\waifu2x-caffe\waifu2x-caffe-cui.exe"
+function Invoke-Waifu2xCaffeCUI {
+    & $Waifu2xCaffePath @args
+}
+Set-Alias waifu2x Invoke-Waifu2xCaffeCUI
