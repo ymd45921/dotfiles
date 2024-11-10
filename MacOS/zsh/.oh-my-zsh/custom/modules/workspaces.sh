@@ -13,6 +13,7 @@ EXTERNAL_DRIVE_PATH=${external_drive_paths[1]}
 EXTERNAL_HOME_DIR="$EXTERNAL_DRIVE_PATH/Users/$USER"
 EXTERNAL_APP_DIR="$EXTERNAL_DRIVE_PATH/Applications"
 EXTERNAL_CLI_DIR="$EXTERNAL_HOME_DIR/Command Line Tools.localized"
+EXTERNAL_DEV_DIR="$EXTERNAL_DRIVE_PATH/Developer"
 run_cli_if_external_mounted() {
     if [[ -d $EXTERNAL_DRIVE_PATH ]]; then
         if [[ -z $1 ]]; then
@@ -36,6 +37,7 @@ alias extd="cd $EXTERNAL_DRIVE_PATH"
 alias exthome="cd $EXTERNAL_HOME_DIR"
 alias extapp="cd $EXTERNAL_APP_DIR"
 alias extcli="cd $EXTERNAL_CLI_DIR"
+alias extdev="cd $EXTERNAL_DEV_DIR"
 alias extrun="run_cli_if_external_mounted"
 
 ### Workspaces aliases

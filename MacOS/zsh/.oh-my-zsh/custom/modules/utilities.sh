@@ -79,3 +79,59 @@ patch_vscodium() {
     echo "The patched product.json has been copied to the clipboard. Please patch it manually."
     code $res_path/product.json
 }
+
+declare -a system_localized_folders=(\
+    "Applications" "Library" "Users" "System" "Volumes" \
+    "Public" "Pictures" "Movies" "Music" "Downloads" "Documents" "Desktop" \
+)   # TODO: 其他的系统文件夹
+set_folder_localname() {
+    if [[ -z $1 ]]; then
+        echo "No folder name provided."
+        return 1
+    fi
+    local dir_name=$1
+    if [[ dir_name != *".localized" ]]; then
+        if [[ " ${system_localized_folders[@]} " =~ " $(basename $dir_name) " ]]; then
+            if [[ ! -d $dir_name ]]; then
+                echo "The folder $dir_name is not found."
+                return 1
+            fi
+            touch $dir_name/.localized
+            return 0
+        fi
+        dir_name="$dir_name.localized"
+    fi
+    if [[ ! -d $dir_name ]]; then
+        echo "The folder $dir_name is not found."
+        return 1
+    fi
+    local folder_name=$(basename $dir_name .localized)
+
+    local local_name=$2
+    if [[ -z $local_name ]]; then
+        return 0
+    fi
+
+    mkdir -p $dir_name/.localized
+    local region_name="zh_CN"
+    if [[ ! -z $3 ]]; then 
+        region_name=$3
+    fi
+    if [[ -e $dir_name/.localized/$region_name.strings ]]; then
+        echo "The localized name file $dir_name/.localized/$region_name.strings is already exist."
+        mv $dir_name/.localized/$region_name.strings $dir_name/.localized/$region_name.strings.bak
+        echo "The original file has been backuped to $dir_name/.localized/$region_name.strings.bak."
+    fi
+
+    # TODO: 更好的修改 plist 文件的方法
+    local xml_content="<?xml version=\"1.0\" encoding=\"UTF-8\"?>
+<!DOCTYPE plist PUBLIC \"-//Apple//DTD PLIST 1.0//EN\" \"http://www.apple.com/DTDs/PropertyList-1.0.dtd\">
+<plist version=\"1.0\">
+    <dict>
+        <key>$folder_name</key>
+        <string>$local_name</string>
+    </dict>
+</plist>"
+    echo $xml_content > $dir_name/.localized/$region_name.strings
+}
+alias localname="set_folder_localname"
