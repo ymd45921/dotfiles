@@ -90,7 +90,7 @@ set_folder_localname() {
         return 1
     fi
     local dir_name=$1
-    if [[ dir_name != *".localized" ]]; then
+    if [[ $dir_name != *".localized" ]]; then
         if [[ " ${system_localized_folders[@]} " =~ " $(basename $dir_name) " ]]; then
             if [[ ! -d $dir_name ]]; then
                 echo "The folder $dir_name is not found."
@@ -134,4 +134,31 @@ set_folder_localname() {
 </plist>"
     echo $xml_content > $dir_name/.localized/$region_name.strings
 }
+mkdir_with_localname() {
+    local dir_name=$1
+    local local_name=$2
+    if [[ -z $dir_name ]]; then
+        echo "No directories need to create."
+        return 1
+    fi
+    local dir_path=$dir_name.localized
+    if [[ " ${system_localized_folders[@]} " =~ " $(basename $dir_name) " ]]; then
+        dir_path=$dir_name
+        if [[ ! -z $local_name ]]; then 
+            echo "The system folder $dir_name cannot be localized as custom local name."
+            return 1
+        fi
+    fi
+    if [[ -d $dir_path ]]; then
+        echo "The directory $dir_path is already exist."
+        return 1
+    fi
+    mkdir -p $dir_path
+    if [[ -z $local_name ]]; then
+        echo "No localized name provided."
+    else
+        set_folder_localname $dir_path $local_name
+    fi
+}
 alias localname="set_folder_localname"
+alias mklocaldir="mkdir_with_localname"
